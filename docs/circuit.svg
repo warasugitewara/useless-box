@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .tm  { font-size: 12px; font-weight: 600; fill: #1a1a1a; }
+  .ts  { font-size: 10px; fill: #555; }
+  .tp  { font-size: 10px; fill: #444; }
+  .tn  { font-size: 10px; font-weight: 700; fill: #7a4e00; }
+  .tb  { font-size: 11px; font-weight: 700; }
+  .box-ard { fill: #e8f7f1; stroke: #0F6E56; stroke-width: 1; rx: 8; }
+  .box-srv { fill: #e8f2fb; stroke: #185FA5; stroke-width: 1; }
+  .box-sw  { fill: #f2f2f0; stroke: #666;    stroke-width: 1; }
+  .box-bat { fill: #fdf8ed; stroke: #8a6020; stroke-width: 1; }
+  .w5v  { stroke: #c93b2a; stroke-width: 2;   fill: none; }
+  .wgnd { stroke: #333;    stroke-width: 2;   fill: none; }
+  .wsig { stroke: #1e6eb5; stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; }
+  .wbus5v  { stroke: #c93b2a; stroke-width: 2.5; fill: none; }
+  .wbusgnd { stroke: #333;    stroke-width: 2.5; fill: none; }
+  .cap { stroke: #8a5000; stroke-width: 2.5; fill: none; }
+  .cap-box { fill: #fffbe8; stroke: #c89030; stroke-width: 1.5; stroke-dasharray: 4,3; }
+</style>
+<rect width="720" height="430" fill="#ffffff"/>
+
+<!-- Title -->
+<text x="360" y="26" text-anchor="middle" font-family="-apple-system,sans-serif"
+      font-size="15" font-weight="700" fill="#0a0a0a">useless-box 回路図</text>
+
+<!-- Battery -->
+<rect x="12" y="155" width="80" height="92" rx="8" class="box-bat"/>
+<text class="tm" x="52" y="187" text-anchor="middle">電池</text>
+<text class="ts" x="52" y="204" text-anchor="middle">単三 × 3</text>
+<text class="ts" x="52" y="219" text-anchor="middle">4.5V</text>
+<text class="tp" x="92" y="174" text-anchor="end" fill="#c93b2a">R+</text>
+<text class="tp" x="92" y="228" text-anchor="end">B−</text>
+
+<!-- Main switch -->
+<rect x="108" y="169" width="54" height="34" rx="6" class="box-sw"/>
+<text class="ts" x="135" y="190" text-anchor="middle">主SW</text>
+
+<!-- Battery R+ → main SW → Arduino 5V (left) -->
+<line x1="92" y1="170" x2="108" y2="176" class="w5v"/>
+<line x1="162" y1="176" x2="180" y2="176" class="w5v"/>
+<line x1="180" y1="176" x2="180" y2="98" class="w5v"/>
+<line x1="180" y1="98"  x2="196" y2="98"  class="w5v"/>
+
+<!-- Battery B− → Arduino GND (left) -->
+<line x1="92" y1="224" x2="180" y2="224" class="wgnd"/>
+<line x1="180" y1="224" x2="180" y2="295" class="wgnd"/>
+<line x1="180" y1="295" x2="196" y2="295" class="wgnd"/>
+
+<!-- Arduino UNO 3 -->
+<rect x="196" y="48" width="148" height="295" rx="8" class="box-ard"/>
+<text class="tm" x="270" y="74"  text-anchor="middle">Arduino UNO 3</text>
+<!-- Left side labels -->
+<text class="tp" x="204" y="102" fill="#c93b2a">← 5V</text>
+<text class="tp" x="204" y="299">← GND</text>
+<!-- Right side labels -->
+<text class="tp" x="337" y="115" text-anchor="end">5V →</text>
+<text class="tp" x="337" y="145" text-anchor="end">D5 →</text>
+<text class="tp" x="337" y="192" text-anchor="end">D6 →</text>
+<text class="tp" x="337" y="238" text-anchor="end">A0</text>
+<text class="tp" x="337" y="250" text-anchor="end" fill="#aaa">(未接続)</text>
+<text class="tp" x="337" y="266" text-anchor="end">D12 →</text>
+<text class="tp" x="337" y="297" text-anchor="end">GND →</text>
+
+<!-- 5V bus -->
+<line x1="344" y1="111" x2="400" y2="111" class="w5v"/>
+<line x1="400" y1="68"  x2="400" y2="375" class="wbus5v"/>
+<text class="tb" x="400" y="61" text-anchor="middle" fill="#c93b2a">5V</text>
+
+<!-- GND bus -->
+<line x1="344" y1="293" x2="437" y2="293" class="wgnd"/>
+<line x1="437" y1="68"  x2="437" y2="375" class="wbusgnd"/>
+<text class="tb" x="437" y="61" text-anchor="middle" fill="#333">GND</text>
+
+<!-- SG90 block -->
+<rect x="462" y="68" width="240" height="57" rx="8" class="box-srv"/>
+<text class="tm" x="582" y="93" text-anchor="middle">SG90（フタ）</text>
+<text class="ts" x="582" y="110" text-anchor="middle">オレンジ：信号　赤：VCC　茶：GND</text>
+<!-- SG90 connections -->
+<line x1="400" y1="86" x2="462" y2="86" class="w5v"/>
+<line x1="437" y1="101" x2="462" y2="101" class="wgnd"/>
+<line x1="344" y1="141" x2="462" y2="78" class="wsig"/>
+
+<!-- MG996R block -->
+<rect x="462" y="162" width="240" height="57" rx="8" class="box-srv"/>
+<text class="tm" x="582" y="187" text-anchor="middle">MG996R（腕）</text>
+<text class="ts" x="582" y="204" text-anchor="middle">黄：信号　赤：VCC　茶：GND</text>
+<!-- MG996R connections -->
+<line x1="400" y1="179" x2="462" y2="179" class="w5v"/>
+<line x1="437" y1="192" x2="462" y2="192" class="wgnd"/>
+<line x1="344" y1="188" x2="462" y2="171" class="wsig"/>
+
+<!-- Trigger switch block -->
+<rect x="462" y="270" width="240" height="52" rx="8" class="box-sw"/>
+<text class="tm" x="582" y="295" text-anchor="middle">スイッチ（箱）</text>
+<text class="ts" x="582" y="311" text-anchor="middle">黒：GND　白：信号</text>
+<!-- SW connections -->
+<line x1="437" y1="285" x2="462" y2="285" class="wgnd"/>
+<line x1="344" y1="262" x2="462" y2="278" class="wsig"/>
+
+<!-- Capacitor highlight -->
+<rect x="382" y="228" width="110" height="72" rx="6" class="cap-box"/>
+<text class="tn" x="437" y="222" text-anchor="middle">470µF × 2（並列）</text>
+<!-- C1 -->
+<line x1="400" y1="248" x2="411" y2="248" class="cap"/>
+<line x1="411" y1="240" x2="411" y2="256" class="cap"/>
+<line x1="418" y1="240" x2="418" y2="256" class="cap"/>
+<line x1="418" y1="248" x2="437" y2="248" class="cap"/>
+<text class="tp" x="403" y="244" fill="#8a5000">+</text>
+<text class="tp" x="433" y="244">−</text>
+<!-- C2 -->
+<line x1="400" y1="272" x2="411" y2="272" class="cap"/>
+<line x1="411" y1="264" x2="411" y2="280" class="cap"/>
+<line x1="418" y1="264" x2="418" y2="280" class="cap"/>
+<line x1="418" y1="272" x2="437" y2="272" class="cap"/>
+<text class="tp" x="403" y="268" fill="#8a5000">+</text>
+<text class="tp" x="433" y="268">−</text>
+
+<!-- Legend -->
+<line x1="15"  y1="410" x2="45"  y2="410" class="w5v"/>
+<text class="ts" x="50"  y="414">電源 5V</text>
+<line x1="140" y1="410" x2="170" y2="410" class="wgnd"/>
+<text class="ts" x="175" y="414">GND</text>
+<line x1="260" y1="410" x2="290" y2="410" class="wsig"/>
+<text class="ts" x="295" y="414">信号線（破線）</text>
+<line x1="420" y1="410" x2="450" y2="410" stroke="#8a5000" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
+<text class="ts" x="455" y="414" fill="#8a5000">コンデンサ（MG996R 根本に並列）</text>
+</svg>
