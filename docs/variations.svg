@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 460">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .ct { font-size: 12px; font-weight: 700; fill: #1a1a1a; }
+  .cn { font-size: 11px; fill: #444; }
+  .ca { font-size: 9px;  fill: #bbb; }
+  .cl { font-size: 10px; fill: #555; }
+</style>
+<rect width="680" height="460" fill="#ffffff"/>
+<text x="340" y="26" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#0a0a0a">バリエーション一覧</text>
+<text x="340" y="40" text-anchor="middle" font-size="10" fill="#999">スイッチを押すたびにランダム選択</text>
+<rect x="0" y="48" width="680" height="80" fill="#f9f9f9"/>
+<line x1="0" y1="48" x2="680" y2="48" stroke="#e0e0e0" stroke-width="1"/>
+<text class="ct" x="8" y="68">Case 1</text>
+<text class="cn" x="8" y="84">ノーマル</text>
+<text class="cl" x="124" y="74" text-anchor="end">フタ</text>
+<text class="cl" x="124" y="106" text-anchor="end">腕</text>
+<line x1="128" y1="64"  x2="660" y2="64"  stroke="#dce8f5" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="86" x2="660" y2="86" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="96"   x2="660" y2="96"   stroke="#f5dcd8" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="118"   x2="660" y2="118"   stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<text class="ca" x="126" y="67"  text-anchor="end">開</text>
+<text class="ca" x="126" y="89" text-anchor="end">閉</text>
+<text class="ca" x="126" y="99"   text-anchor="end">伸</text>
+<text class="ca" x="126" y="121"   text-anchor="end">収</text>
+<polyline points="128.0,86.0 207.8,64.0 314.2,64.0 420.6,64.0 527.0,86.0 660.0,86.0" stroke="#185FA5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<polyline points="128.0,118.0 207.8,118.0 314.2,96.0 420.6,118.0 527.0,118.0 660.0,118.0" stroke="#993C1D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<rect x="0" y="128" width="680" height="80" fill="#ffffff"/>
+<line x1="0" y1="128" x2="680" y2="128" stroke="#e0e0e0" stroke-width="1"/>
+<text class="ct" x="8" y="148">Case 2</text>
+<text class="cn" x="8" y="164">ためらいがち</text>
+<text class="cl" x="124" y="154" text-anchor="end">フタ</text>
+<text class="cl" x="124" y="186" text-anchor="end">腕</text>
+<line x1="128" y1="144"  x2="660" y2="144"  stroke="#dce8f5" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="166" x2="660" y2="166" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="176"   x2="660" y2="176"   stroke="#f5dcd8" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="198"   x2="660" y2="198"   stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<text class="ca" x="126" y="147"  text-anchor="end">開</text>
+<text class="ca" x="126" y="169" text-anchor="end">閉</text>
+<text class="ca" x="126" y="179"   text-anchor="end">伸</text>
+<text class="ca" x="126" y="201"   text-anchor="end">収</text>
+<polyline points="128.0,166.0 191.8,155.0 245.0,166.0 319.5,144.0 394.0,144.0 473.8,144.0 543.0,166.0 660.0,166.0" stroke="#185FA5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<polyline points="128.0,198.0 191.8,198.0 245.0,198.0 319.5,198.0 394.0,176.0 473.8,198.0 543.0,198.0 660.0,198.0" stroke="#993C1D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<rect x="0" y="208" width="680" height="80" fill="#f9f9f9"/>
+<line x1="0" y1="208" x2="680" y2="208" stroke="#e0e0e0" stroke-width="1"/>
+<text class="ct" x="8" y="228">Case 3</text>
+<text class="cn" x="8" y="244">即ブチ切れ</text>
+<text class="cl" x="124" y="234" text-anchor="end">フタ</text>
+<text class="cl" x="124" y="266" text-anchor="end">腕</text>
+<line x1="128" y1="224"  x2="660" y2="224"  stroke="#dce8f5" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="246" x2="660" y2="246" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="256"   x2="660" y2="256"   stroke="#f5dcd8" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="278"   x2="660" y2="278"   stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<text class="ca" x="126" y="227"  text-anchor="end">開</text>
+<text class="ca" x="126" y="249" text-anchor="end">閉</text>
+<text class="ca" x="126" y="259"   text-anchor="end">伸</text>
+<text class="ca" x="126" y="281"   text-anchor="end">収</text>
+<polyline points="128.0,246.0 181.2,224.0 277.0,224.0 372.7,224.0 447.2,246.0 660.0,246.0" stroke="#185FA5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<polyline points="128.0,278.0 181.2,278.0 277.0,256.0 372.7,278.0 447.2,278.0 660.0,278.0" stroke="#993C1D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<rect x="0" y="288" width="680" height="80" fill="#ffffff"/>
+<line x1="0" y1="288" x2="680" y2="288" stroke="#e0e0e0" stroke-width="1"/>
+<text class="ct" x="8" y="308">Case 4</text>
+<text class="cn" x="8" y="324">フェイント2連</text>
+<text class="cl" x="124" y="314" text-anchor="end">フタ</text>
+<text class="cl" x="124" y="346" text-anchor="end">腕</text>
+<line x1="128" y1="304"  x2="660" y2="304"  stroke="#dce8f5" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="326" x2="660" y2="326" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="336"   x2="660" y2="336"   stroke="#f5dcd8" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="358"   x2="660" y2="358"   stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<text class="ca" x="126" y="307"  text-anchor="end">開</text>
+<text class="ca" x="126" y="329" text-anchor="end">閉</text>
+<text class="ca" x="126" y="339"   text-anchor="end">伸</text>
+<text class="ca" x="126" y="361"   text-anchor="end">収</text>
+<polyline points="128.0,326.0 170.6,318.1 202.5,326.0 245.0,312.4 282.3,326.0 335.5,304.0 415.3,304.0 489.8,304.0 553.6,326.0 660.0,326.0" stroke="#185FA5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<polyline points="128.0,358.0 170.6,358.0 202.5,358.0 245.0,358.0 282.3,358.0 335.5,358.0 415.3,336.0 489.8,358.0 553.6,358.0 660.0,358.0" stroke="#993C1D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<rect x="0" y="368" width="680" height="80" fill="#f9f9f9"/>
+<line x1="0" y1="368" x2="680" y2="368" stroke="#e0e0e0" stroke-width="1"/>
+<text class="ct" x="8" y="388">Case 5</text>
+<text class="cn" x="8" y="404">連続ノック</text>
+<text class="cl" x="124" y="394" text-anchor="end">フタ</text>
+<text class="cl" x="124" y="426" text-anchor="end">腕</text>
+<line x1="128" y1="384"  x2="660" y2="384"  stroke="#dce8f5" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="406" x2="660" y2="406" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="416"   x2="660" y2="416"   stroke="#f5dcd8" stroke-width="1" stroke-dasharray="3,4"/>
+<line x1="128" y1="438"   x2="660" y2="438"   stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,4"/>
+<text class="ca" x="126" y="387"  text-anchor="end">開</text>
+<text class="ca" x="126" y="409" text-anchor="end">閉</text>
+<text class="ca" x="126" y="419"   text-anchor="end">伸</text>
+<text class="ca" x="126" y="441"   text-anchor="end">収</text>
+<polyline points="128.0,406.0 191.8,384.0 261.0,384.0 340.8,384.0 415.3,384.0 489.8,384.0 553.6,406.0 660.0,406.0" stroke="#185FA5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<polyline points="128.0,438.0 191.8,438.0 261.0,416.0 340.8,438.0 415.3,416.0 489.8,438.0 553.6,438.0 660.0,438.0" stroke="#993C1D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+<line x1="0" y1="448" x2="680" y2="448" stroke="#e0e0e0" stroke-width="1"/>
+<line x1="128" y1="470" x2="158" y2="470" stroke="#185FA5" stroke-width="2.5"/>
+<text x="163" y="474" font-size="11" fill="#185FA5">フタ (SG90)</text>
+<line x1="278" y1="470" x2="308" y2="470" stroke="#993C1D" stroke-width="2.5"/>
+<text x="313" y="474" font-size="11" fill="#993C1D">腕 (MG996R)</text>
+</svg>
