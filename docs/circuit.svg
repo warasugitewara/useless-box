@@ -98,23 +98,34 @@
 <line x1="437" y1="285" x2="462" y2="285" class="wgnd"/>
 <line x1="344" y1="262" x2="462" y2="278" class="wsig"/>
 
-<!-- Capacitor highlight -->
-<rect x="382" y="228" width="110" height="72" rx="6" class="cap-box"/>
-<text class="tn" x="437" y="222" text-anchor="middle">470µF × 2（並列）</text>
-<!-- C1 -->
-<line x1="400" y1="248" x2="411" y2="248" class="cap"/>
-<line x1="411" y1="240" x2="411" y2="256" class="cap"/>
-<line x1="418" y1="240" x2="418" y2="256" class="cap"/>
-<line x1="418" y1="248" x2="437" y2="248" class="cap"/>
-<text class="tp" x="403" y="244" fill="#8a5000">+</text>
-<text class="tp" x="433" y="244">−</text>
-<!-- C2 -->
-<line x1="400" y1="272" x2="411" y2="272" class="cap"/>
-<line x1="411" y1="264" x2="411" y2="280" class="cap"/>
-<line x1="418" y1="264" x2="418" y2="280" class="cap"/>
-<line x1="418" y1="272" x2="437" y2="272" class="cap"/>
-<text class="tp" x="403" y="268" fill="#8a5000">+</text>
-<text class="tp" x="433" y="268">−</text>
+<!-- Capacitor ─ バス縦線(x=400, x=437)の外側(x=462以上)に配置 -->
+<!-- Junction dots: 分岐点を明示 -->
+<circle cx="400" cy="240" r="4" fill="#c93b2a"/>
+<circle cx="437" cy="250" r="4" fill="#333"/>
+<!-- 5V 引き出し線: バス → コンデンサ+ 共通 -->
+<line x1="400" y1="240" x2="470" y2="240" class="w5v"/>
+<!-- GND 引き出し線: コンデンサ- 共通 → バス -->
+<line x1="548" y1="250" x2="437" y2="250" class="wgnd"/>
+<!-- 5V / GND 共通縦線 -->
+<line x1="470" y1="233" x2="470" y2="252" class="w5v"/>
+<line x1="548" y1="233" x2="548" y2="252" class="wgnd"/>
+<!-- Highlight box: x=462 以上なのでバス縦線と重ならない -->
+<rect x="462" y="220" width="100" height="46" rx="6" class="cap-box"/>
+<text class="tn" x="512" y="216" text-anchor="middle">470µF × 2（並列）</text>
+<!-- C1 (y=233) -->
+<line x1="470" y1="233" x2="478" y2="233" class="cap"/>
+<line x1="478" y1="225" x2="478" y2="241" class="cap"/>
+<line x1="485" y1="225" x2="485" y2="241" class="cap"/>
+<line x1="485" y1="233" x2="548" y2="233" class="cap"/>
+<text class="tp" x="473" y="229" fill="#8a5000">+</text>
+<text class="tp" x="543" y="229">−</text>
+<!-- C2 (y=251) -->
+<line x1="470" y1="251" x2="478" y2="251" class="cap"/>
+<line x1="478" y1="243" x2="478" y2="259" class="cap"/>
+<line x1="485" y1="243" x2="485" y2="259" class="cap"/>
+<line x1="485" y1="251" x2="548" y2="251" class="cap"/>
+<text class="tp" x="473" y="248" fill="#8a5000">+</text>
+<text class="tp" x="543" y="248">−</text>
 
 <!-- Legend -->
 <line x1="15"  y1="410" x2="45"  y2="410" class="w5v"/>
