@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 500">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 500">
 <style>
   text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
   .tm  { font-size: 12px; font-weight: 600; fill: #1a1a1a; }
@@ -6,173 +6,213 @@
   .tp  { font-size: 10px; fill: #444; }
   .tn  { font-size: 10px; font-weight: 700; fill: #7a4e00; }
   .tb  { font-size: 11px; font-weight: 700; }
-  .tg  { font-size: 11px; font-weight: 700; fill: #1a6e2a; }
-  .box-ard { fill: #e8f7f1; stroke: #0F6E56; stroke-width: 1; }
-  .box-srv { fill: #e8f2fb; stroke: #185FA5; stroke-width: 1; }
-  .box-sw  { fill: #f2f2f0; stroke: #666;    stroke-width: 1; }
-  .box-bat { fill: #fdf8ed; stroke: #8a6020; stroke-width: 1; }
-  .box-bat6 { fill: #edf8ed; stroke: #1a6e2a; stroke-width: 1.5; }
-  .w5v  { stroke: #c93b2a; stroke-width: 2;   fill: none; }
-  .wgnd { stroke: #333;    stroke-width: 2;   fill: none; }
-  .wsig { stroke: #1e6eb5; stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; }
+  .box-ard  { fill: #e8f7f1; stroke: #0F6E56; stroke-width: 1; }
+  .box-srv  { fill: #e8f2fb; stroke: #185FA5; stroke-width: 1; }
+  .box-sw   { fill: #f2f2f0; stroke: #666;    stroke-width: 1; }
+  .box-batA { fill: #fdf8ed; stroke: #8a6020; stroke-width: 1; }
+  .box-batB { fill: #edf8ed; stroke: #1a6e2a; stroke-width: 1.5; }
+  /* 電源A 4.5V系 */
+  .w5v     { stroke: #c93b2a; stroke-width: 2;   fill: none; }
   .wbus5v  { stroke: #c93b2a; stroke-width: 2.5; fill: none; }
-  .wbusgnd { stroke: #333;    stroke-width: 2.5; fill: none; }
-  .w6v  { stroke: #1a6e2a; stroke-width: 2;   fill: none; }
+  /* 電源B 6V系 */
+  .w6v     { stroke: #1a6e2a; stroke-width: 2;   fill: none; }
   .wbus6v  { stroke: #1a6e2a; stroke-width: 2.5; fill: none; }
-  .cap { stroke: #8a5000; stroke-width: 2.5; fill: none; }
+  /* GND共通 */
+  .wgnd    { stroke: #333;    stroke-width: 2;   fill: none; }
+  .wbusgnd { stroke: #333;    stroke-width: 2.5; fill: none; }
+  /* 信号線: 青破線 */
+  .wsig    { stroke: #1e6eb5; stroke-width: 1.5; fill: none; stroke-dasharray: 6,3; }
+  /* コンデンサ */
+  .cap     { stroke: #8a5000; stroke-width: 2.5; fill: none; }
   .cap-box { fill: #fffbe8; stroke: #c89030; stroke-width: 1.5; stroke-dasharray: 4,3; }
-  .wgndcom { stroke: #333; stroke-width: 2; fill: none; stroke-dasharray: 8,3; }
 </style>
-<rect width="780" height="500" fill="#ffffff"/>
+<rect width="860" height="500" fill="#ffffff"/>
 
-<!-- Title -->
-<text x="390" y="26" text-anchor="middle"
-      font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#0a0a0a">useless-box 回路図（2電源構成）</text>
+<!-- タイトル -->
+<text x="430" y="26" text-anchor="middle"
+      font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#111">
+  useless-box 回路図（2電源構成）
+</text>
 
-<!-- ── 電源A: 単三×3本 4.5V (Arduino + SG90) ── -->
-<text x="60" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#c93b2a">電源A 4.5V系</text>
-<rect x="12" y="58" width="96" height="92" rx="8" class="box-bat"/>
-<text class="tm" x="60" y="85"  text-anchor="middle">電池A</text>
-<text class="ts" x="60" y="101" text-anchor="middle">単三 × 3本</text>
-<text class="ts" x="60" y="116" text-anchor="middle">4.5V</text>
-<text class="ts" x="60" y="131" text-anchor="middle">Arduino・SG90</text>
-<text class="tp" x="108" y="76"  text-anchor="end" fill="#c93b2a">R+</text>
-<text class="tp" x="108" y="126" text-anchor="end">B−</text>
+<!-- ══════════════ 電源A ══════════════ -->
+<text x="58" y="50" text-anchor="middle" font-size="10" font-weight="700" fill="#c93b2a">電源A 4.5V</text>
+<rect x="14" y="56" width="88" height="88" rx="8" class="box-batA"/>
+<text class="tm" x="58" y="82"  text-anchor="middle">電池A</text>
+<text class="ts" x="58" y="98"  text-anchor="middle">単三 × 3本</text>
+<text class="ts" x="58" y="114" text-anchor="middle">4.5V</text>
+<text class="ts" x="58" y="130" text-anchor="middle">Arduino・SG90</text>
+<text class="tp" x="100" y="76"  text-anchor="end" fill="#c93b2a">R+</text>
+<text class="tp" x="100" y="128" text-anchor="end">B−</text>
 
 <!-- 主スイッチ -->
-<rect x="122" y="70" width="54" height="34" rx="6" class="box-sw"/>
-<text class="ts" x="149" y="91" text-anchor="middle">主SW</text>
+<rect x="115" y="70" width="54" height="26" rx="5" class="box-sw"/>
+<text class="ts" x="142" y="87" text-anchor="middle">主SW</text>
 
-<!-- 電池A R+ → 主SW → Arduino 5V (left) -->
-<line x1="108" y1="73" x2="122" y2="77" class="w5v"/>
-<line x1="176" y1="77" x2="192" y2="77" class="w5v"/>
-<line x1="192" y1="77" x2="192" y2="112" class="w5v"/>
-<line x1="192" y1="112" x2="208" y2="112" class="w5v"/>
+<!-- 電池A R+ → 主SW → Arduino 5V (left) : 全水平 y=83 -->
+<line x1="100" y1="83" x2="115" y2="83" class="w5v"/>
+<line x1="169" y1="83" x2="200" y2="83" class="w5v"/>
+<!-- Arduino左辺内で 5V端子 y=83 なのでそのままright へ -->
 
-<!-- 電池A GND → Arduino GND (left) -->
-<line x1="108" y1="123" x2="192" y2="123" class="wgnd"/>
-<line x1="192" y1="123" x2="192" y2="308" class="wgnd"/>
-<line x1="192" y1="308" x2="208" y2="308" class="wgnd"/>
+<!-- 電池A GND → (右へ x=188) → (下へ y=303) → Arduino GND(left) -->
+<line x1="100" y1="128" x2="188" y2="128" class="wgnd"/>
+<line x1="188" y1="128" x2="188" y2="303" class="wgnd"/>
+<line x1="188" y1="303" x2="200" y2="303" class="wgnd"/>
 
-<!-- ── 電源B: 単三×4本 6.0V (MG996R専用) ── -->
-<text x="60" y="205" text-anchor="middle" font-size="11" font-weight="700" fill="#1a6e2a">電源B 6V系</text>
-<rect x="12" y="212" width="96" height="100" rx="8" class="box-bat6"/>
-<text class="tm" x="60" y="238" text-anchor="middle">電池B</text>
-<text class="ts" x="60" y="254" text-anchor="middle">単三 × 4本</text>
-<text class="ts" x="60" y="270" text-anchor="middle">6.0V</text>
-<text class="ts" x="60" y="286" text-anchor="middle">MG996R専用</text>
-<text class="tp" x="108" y="229" text-anchor="end" fill="#1a6e2a">R+</text>
-<text class="tp" x="108" y="288" text-anchor="end">B−</text>
+<!-- ══════════════ 電源B ══════════════ -->
+<text x="58" y="183" text-anchor="middle" font-size="10" font-weight="700" fill="#1a6e2a">電源B 6V</text>
+<rect x="14" y="190" width="88" height="100" rx="8" class="box-batB"/>
+<text class="tm" x="58" y="216" text-anchor="middle">電池B</text>
+<text class="ts" x="58" y="232" text-anchor="middle">単三 × 4本</text>
+<text class="ts" x="58" y="248" text-anchor="middle">6.0V</text>
+<text class="ts" x="58" y="264" text-anchor="middle">MG996R専用</text>
+<text class="tp" x="100" y="210" text-anchor="end" fill="#1a6e2a">R+</text>
+<text class="tp" x="100" y="270" text-anchor="end">B−</text>
 
-<!-- 電池B R+ → 6Vバス -->
-<line x1="108" y1="226" x2="192" y2="226" class="w6v"/>
-<line x1="192" y1="226" x2="192" y2="200" class="w6v"/>
-<line x1="192" y1="200" x2="456" y2="200" class="w6v"/>
-<!-- 電池B GND → 共通GND -->
-<line x1="108" y1="286" x2="160" y2="286" class="wgnd"/>
-<line x1="160" y1="286" x2="160" y2="340" class="wgnd"/>
+<!-- 電池B R+: (右→y=210) → (上→y=162) → (右→6Vバス x=495) -->
+<line x1="100" y1="210" x2="155" y2="210" class="w6v"/>
+<line x1="155" y1="210" x2="155" y2="162" class="w6v"/>
+<line x1="155" y1="162" x2="495" y2="162" class="w6v"/>
 
-<!-- ── Arduino UNO 3 ── -->
-<rect x="208" y="60" width="148" height="295" rx="8" class="box-ard"/>
-<text class="tm" x="282" y="86" text-anchor="middle">Arduino UNO 3</text>
-<text class="tp" x="216" y="116" fill="#c93b2a">← 5V</text>
-<text class="tp" x="216" y="312">← GND</text>
-<text class="tp" x="349" y="127" text-anchor="end">5V →</text>
-<text class="tp" x="349" y="157" text-anchor="end">D5 →</text>
-<text class="tp" x="349" y="204" text-anchor="end">D6 →</text>
-<text class="tp" x="349" y="248" text-anchor="end">A0</text>
-<text class="tp" x="349" y="260" text-anchor="end" fill="#aaa">(未接続)</text>
-<text class="tp" x="349" y="278" text-anchor="end">D12 →</text>
-<text class="tp" x="349" y="310" text-anchor="end">GND →</text>
+<!-- 電池B GND: (右→x=102) → (下→y=385) → (右→GNDバス x=525) -->
+<line x1="100" y1="270" x2="170" y2="270" class="wgnd"/>
+<line x1="170" y1="270" x2="170" y2="385" class="wgnd"/>
+<line x1="170" y1="385" x2="525" y2="385" class="wgnd"/>
 
-<!-- ── 5V バス (Arduino + SG90) ── -->
-<line x1="356" y1="123" x2="414" y2="123" class="w5v"/>
-<line x1="414" y1="80"  x2="414" y2="390" class="wbus5v"/>
-<text class="tb"  x="414" y="72" text-anchor="middle" fill="#c93b2a">5V</text>
+<!-- ══════════════ Arduino UNO 3 ══════════════ -->
+<rect x="200" y="45" width="150" height="295" rx="8" class="box-ard"/>
+<text class="tm" x="275" y="71" text-anchor="middle">Arduino UNO 3</text>
+<!-- 左辺ラベル -->
+<text class="tp" x="208" y="87"  fill="#c93b2a">← 5V</text>
+<text class="tp" x="208" y="307">← GND</text>
+<!-- 右辺ラベル -->
+<text class="tp" x="342" y="87"  text-anchor="end">5V  →</text>
+<text class="tp" x="342" y="127" text-anchor="end">D5  →</text>
+<text class="tp" x="342" y="182" text-anchor="end">D6  →</text>
+<text class="tp" x="342" y="232" text-anchor="end">A0</text>
+<text class="tp" x="342" y="244" text-anchor="end" fill="#bbb">(未接続)</text>
+<text class="tp" x="342" y="262" text-anchor="end">D12 →</text>
+<text class="tp" x="342" y="307" text-anchor="end">GND →</text>
 
-<!-- ── 6V バス (MG996R専用) ── -->
-<line x1="414" y1="200" x2="456" y2="200" class="w6v"/>
-<line x1="456" y1="80"  x2="456" y2="390" class="wbus6v"/>
-<text class="tg"  x="456" y="72" text-anchor="middle">6V</text>
+<!-- ══════════════ 5V バス ══════════════ -->
+<!-- Arduino right 5V(y=83) → バス x=465 -->
+<line x1="350" y1="83" x2="465" y2="83" class="w5v"/>
+<circle cx="465" cy="83" r="4" fill="#c93b2a"/>
+<!-- 5Vバス縦線 -->
+<line x1="465" y1="58" x2="465" y2="405" class="wbus5v"/>
+<text class="tb" x="465" y="52" text-anchor="middle" fill="#c93b2a">5V</text>
 
-<!-- ── GND 共通バス ── -->
-<line x1="356" y1="306" x2="493" y2="306" class="wgnd"/>
-<line x1="493" y1="72"  x2="493" y2="390" class="wbusgnd"/>
-<text class="tb"  x="493" y="64" text-anchor="middle" fill="#333">GND</text>
-<!-- 電池B GND → 共通GND バス -->
-<line x1="160" y1="340" x2="493" y2="340" class="wgnd"/>
-<circle cx="493" cy="340" r="4" fill="#333"/>
+<!-- ══════════════ 6V バス ══════════════ -->
+<!-- 電池B R+ → バス接続ジャンクション -->
+<circle cx="495" cy="162" r="4" fill="#1a6e2a"/>
+<!-- 6Vバス縦線 -->
+<line x1="495" y1="58" x2="495" y2="405" class="wbus6v"/>
+<text class="tb" x="495" y="52" text-anchor="middle" fill="#1a6e2a">6V</text>
+
+<!-- ══════════════ GND バス ══════════════ -->
+<!-- Arduino right GND(y=303) → バス x=525 -->
+<line x1="350" y1="303" x2="525" y2="303" class="wgnd"/>
+<circle cx="525" cy="303" r="4" fill="#333"/>
+<!-- 電池B GND合流ジャンクション -->
+<circle cx="525" cy="385" r="4" fill="#333"/>
+<!-- GNDバス縦線 -->
+<line x1="525" y1="58" x2="525" y2="405" class="wbusgnd"/>
+<text class="tb" x="525" y="52" text-anchor="middle" fill="#333">GND</text>
+
 <!-- GND共通ラベル -->
-<text class="ts" x="250" y="358" fill="#888">─ ─ ─  GND 共通（必須）  ─ ─ ─</text>
+<text x="340" y="400" text-anchor="middle" font-size="9" fill="#999">
+  ▲ 電池A・B のGNDをここで共通接続（必須）
+</text>
 
-<!-- ── SG90（フタ）4.5V系 ── -->
-<rect x="528" y="72" width="230" height="55" rx="8" class="box-srv"/>
-<text class="tm" x="643" y="97" text-anchor="middle">SG90（フタ）</text>
-<text class="ts" x="643" y="113" text-anchor="middle">オレンジ：信号　赤：VCC(5V)　茶：GND</text>
-<!-- SG90 VCC from 5V bus -->
-<line x1="414" y1="92" x2="528" y2="92" class="w5v"/>
-<!-- SG90 GND from GND bus -->
-<line x1="493" y1="106" x2="528" y2="106" class="wgnd"/>
-<!-- SG90 signal from D5 -->
-<line x1="356" y1="153" x2="528" y2="82" class="wsig"/>
+<!-- ══════════════ SG90（フタ）4.5V系 ══════════════ -->
+<rect x="560" y="60" width="280" height="56" rx="8" class="box-srv"/>
+<text class="tm" x="700" y="85"  text-anchor="middle">SG90（フタ）</text>
+<text class="ts" x="700" y="103" text-anchor="middle">オレンジ：信号　赤：VCC 5V　茶：GND</text>
 
-<!-- ── MG996R（腕）6V系 ── -->
-<rect x="528" y="168" width="230" height="57" rx="8" class="box-srv"/>
-<text class="tm" x="643" y="193" text-anchor="middle">MG996R（腕）</text>
-<text class="ts" x="643" y="210" text-anchor="middle">黄：信号　赤：VCC(6V)　茶：GND</text>
-<!-- MG996R VCC from 6V bus -->
-<line x1="456" y1="186" x2="528" y2="186" class="w6v"/>
-<!-- MG996R GND from GND bus -->
-<line x1="493" y1="198" x2="528" y2="198" class="wgnd"/>
-<!-- MG996R signal from D6 -->
-<line x1="356" y1="200" x2="528" y2="178" class="wsig"/>
+<!-- SG90 VCC: 5Vバス(x=465, y=80) → 右 -->
+<line x1="465" y1="80" x2="560" y2="80" class="w5v"/>
+<circle cx="465" cy="80" r="4" fill="#c93b2a"/>
+<!-- SG90 GND: GNDバス(x=525, y=97) → 右 -->
+<line x1="525" y1="97" x2="560" y2="97" class="wgnd"/>
+<circle cx="525" cy="97" r="4" fill="#333"/>
+<!-- D5 信号: Arduino(350,127) → 縦走路x=375 → 上y=72 → 右560 -->
+<line x1="350" y1="127" x2="375" y2="127" class="wsig"/>
+<line x1="375" y1="127" x2="375" y2="72"  class="wsig"/>
+<line x1="375" y1="72"  x2="560" y2="72"  class="wsig"/>
 
-<!-- ── コンデンサ（6V系 MG996R根本） ── -->
-<circle cx="456" cy="242" r="4" fill="#1a6e2a"/>
-<circle cx="493" cy="252" r="4" fill="#333"/>
-<line x1="456" y1="242" x2="516" y2="242" class="w6v"/>
-<line x1="574" y1="252" x2="493" y2="252" class="wgnd"/>
-<line x1="516" y1="236" x2="516" y2="254" class="w6v"/>
-<line x1="574" y1="236" x2="574" y2="254" class="wgnd"/>
-<rect x="508" y="226" width="100" height="44" rx="6" class="cap-box"/>
-<text class="tn" x="558" y="221" text-anchor="middle">470µF × 2（並列）</text>
-<!-- C1 -->
-<line x1="516" y1="236" x2="524" y2="236" class="cap"/>
-<line x1="524" y1="228" x2="524" y2="244" class="cap"/>
-<line x1="531" y1="228" x2="531" y2="244" class="cap"/>
-<line x1="531" y1="236" x2="574" y2="236" class="cap"/>
-<text class="tp" x="519" y="232" fill="#8a5000">+</text>
-<text class="tp" x="569" y="232">−</text>
-<!-- C2 -->
-<line x1="516" y1="252" x2="524" y2="252" class="cap"/>
-<line x1="524" y1="244" x2="524" y2="260" class="cap"/>
-<line x1="531" y1="244" x2="531" y2="260" class="cap"/>
-<line x1="531" y1="252" x2="574" y2="252" class="cap"/>
-<text class="tp" x="519" y="249" fill="#8a5000">+</text>
-<text class="tp" x="569" y="249">−</text>
+<!-- ══════════════ MG996R（腕）6V系 ══════════════ -->
+<rect x="560" y="158" width="280" height="56" rx="8" class="box-srv"/>
+<text class="tm" x="700" y="183" text-anchor="middle">MG996R（腕）</text>
+<text class="ts" x="700" y="200" text-anchor="middle">黄：信号　赤：VCC 6V　茶：GND</text>
 
-<!-- ── スイッチ（箱） ── -->
-<rect x="528" y="278" width="230" height="52" rx="8" class="box-sw"/>
-<text class="tm" x="643" y="302" text-anchor="middle">スイッチ（箱）</text>
-<text class="ts" x="643" y="318" text-anchor="middle">黒：GND　白：信号</text>
-<line x1="493" y1="295" x2="528" y2="295" class="wgnd"/>
-<line x1="356" y1="274" x2="528" y2="288" class="wsig"/>
+<!-- MG996R VCC: 6Vバス(x=495, y=175) → 右 -->
+<line x1="495" y1="175" x2="560" y2="175" class="w6v"/>
+<circle cx="495" cy="175" r="4" fill="#1a6e2a"/>
+<!-- MG996R GND: GNDバス(x=525, y=190) → 右 -->
+<line x1="525" y1="190" x2="560" y2="190" class="wgnd"/>
+<circle cx="525" cy="190" r="4" fill="#333"/>
+<!-- D6 信号: Arduino(350,182) → 縦走路x=390 → 上y=168 → 右560 -->
+<line x1="350" y1="182" x2="390" y2="182" class="wsig"/>
+<line x1="390" y1="182" x2="390" y2="168" class="wsig"/>
+<line x1="390" y1="168" x2="560" y2="168" class="wsig"/>
 
-<!-- ── 凡例 ── -->
-<line x1="15"  y1="440" x2="45"  y2="440" stroke="#c93b2a" stroke-width="2" fill="none"/>
-<text class="ts" x="50"  y="444">電源A 5V系（Arduino・SG90）</text>
-<line x1="240" y1="440" x2="270" y2="440" stroke="#1a6e2a" stroke-width="2" fill="none"/>
-<text class="ts" x="275" y="444">電源B 6V系（MG996R専用）</text>
-<line x1="480" y1="440" x2="510" y2="440" stroke="#333" stroke-width="2" fill="none"/>
-<text class="ts" x="515" y="444">GND共通</text>
-<line x1="15"  y1="462" x2="45"  y2="462" stroke="#1e6eb5" stroke-width="1.5" stroke-dasharray="5,3" fill="none"/>
-<text class="ts" x="50"  y="466">信号線</text>
-<line x1="140" y1="462" x2="170" y2="462" stroke="#8a5000" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
-<text class="ts" x="175" y="466">コンデンサ（6V系）</text>
+<!-- ══════════════ コンデンサ（6V系 MG996R根本）══════════════ -->
+<!-- 6Vバス(x=495, y=237) → 右 コンデンサ+ 共通 -->
+<circle cx="495" cy="237" r="4" fill="#1a6e2a"/>
+<line x1="495" y1="237" x2="560" y2="237" class="w6v"/>
+<!-- GNDバス(x=525, y=248) → コンデンサ- 共通 ← 右から -->
+<circle cx="525" cy="248" r="4" fill="#333"/>
+<line x1="640" y1="248" x2="525" y2="248" class="wgnd"/>
+<!-- 共通縦線 -->
+<line x1="560" y1="233" x2="560" y2="252" class="w6v"/>
+<line x1="640" y1="233" x2="640" y2="252" class="wgnd"/>
+<!-- Highlight box (バス縦線 x=465,495,525 と重ならない x=552以上) -->
+<rect x="552" y="222" width="104" height="44" rx="6" class="cap-box"/>
+<text class="tn" x="604" y="217" text-anchor="middle">470µF × 2（並列）</text>
+<!-- C1 (y=233) -->
+<line x1="560" y1="233" x2="570" y2="233" class="cap"/>
+<line x1="570" y1="225" x2="570" y2="241" class="cap"/>
+<line x1="577" y1="225" x2="577" y2="241" class="cap"/>
+<line x1="577" y1="233" x2="640" y2="233" class="cap"/>
+<text class="tp" x="563" y="229" fill="#8a5000">+</text>
+<text class="tp" x="635" y="229">−</text>
+<!-- C2 (y=250) -->
+<line x1="560" y1="250" x2="570" y2="250" class="cap"/>
+<line x1="570" y1="242" x2="570" y2="258" class="cap"/>
+<line x1="577" y1="242" x2="577" y2="258" class="cap"/>
+<line x1="577" y1="250" x2="640" y2="250" class="cap"/>
+<text class="tp" x="563" y="247" fill="#8a5000">+</text>
+<text class="tp" x="635" y="247">−</text>
 
-<!-- ── 警告メモ ── -->
-<rect x="12" y="478" width="755" height="18" rx="4" fill="#fff8e1" stroke="#f0c040" stroke-width="1"/>
-<text x="390" y="491" text-anchor="middle" font-size="10" fill="#7a4e00">
-⚠ 電池AとBのGNDを必ず共通接続すること（信号基準電位が合わないとD6の出力が正常に伝わらない）
+<!-- ══════════════ スイッチ（箱）══════════════ -->
+<rect x="560" y="268" width="280" height="52" rx="8" class="box-sw"/>
+<text class="tm" x="700" y="293" text-anchor="middle">スイッチ（箱）</text>
+<text class="ts" x="700" y="309" text-anchor="middle">黒：GND　白：信号</text>
+
+<!-- SW GND: GNDバス(x=525, y=284) → 右 -->
+<line x1="525" y1="284" x2="560" y2="284" class="wgnd"/>
+<circle cx="525" cy="284" r="4" fill="#333"/>
+<!-- D12 信号: Arduino(350,262) → 縦走路x=405 → 下y=292 → 右560 -->
+<line x1="350" y1="262" x2="405" y2="262" class="wsig"/>
+<line x1="405" y1="262" x2="405" y2="292" class="wsig"/>
+<line x1="405" y1="292" x2="560" y2="292" class="wsig"/>
+
+<!-- ══════════════ 凡例 ══════════════ -->
+<line x1="14"  y1="440" x2="44"  y2="440" stroke="#c93b2a" stroke-width="2" fill="none"/>
+<text class="ts" x="49"  y="444">電源A 5V系</text>
+<line x1="135" y1="440" x2="165" y2="440" stroke="#1a6e2a" stroke-width="2" fill="none"/>
+<text class="ts" x="170" y="444">電源B 6V系</text>
+<line x1="255" y1="440" x2="285" y2="440" stroke="#333" stroke-width="2" fill="none"/>
+<text class="ts" x="290" y="444">GND共通</text>
+<line x1="370" y1="440" x2="400" y2="440" stroke="#1e6eb5" stroke-width="1.5" stroke-dasharray="6,3" fill="none"/>
+<text class="ts" x="405" y="444">信号線 (D5/D6/D12)</text>
+<line x1="565" y1="440" x2="595" y2="440" stroke="#8a5000" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
+<text class="ts" x="600" y="444">コンデンサ (6V系)</text>
+<circle cx="766" cy="440" r="4" fill="#555"/>
+<text class="ts" x="774" y="444">接続点</text>
+
+<!-- ══════════════ 警告メモ ══════════════ -->
+<rect x="14" y="460" width="830" height="18" rx="4" fill="#fff8e1" stroke="#f0c040" stroke-width="1"/>
+<text x="430" y="473" text-anchor="middle" font-size="10" fill="#7a4e00">
+  ⚠ 電池A・BのGNDを必ず共通接続すること — D6信号の基準電位が合わないとMG996Rが誤動作する
 </text>
 </svg>
