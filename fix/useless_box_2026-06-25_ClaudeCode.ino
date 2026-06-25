@@ -8,7 +8,15 @@
 //  Hardware : Arduino UNO 3
 //             Servo lid (フタ) → D5  SG90
 //             Servo arm (腕)   → D6  MG996R
-//             Switch            → D12 (外部回路により ON で HIGH ＝意図通り)
+//             Switch            → D12 (INPUT_PULLUP / 後述の事情で論理反転)
+//
+//  ---- スイッチ論理についての注意 ----
+//  スイッチが物理的に逆向きに取り付けられているため、
+//  「スイッチOFF位置 = HIGH / ON位置 = LOW」という反転した論理になっている。
+//  本来 INPUT_PULLUP は「押下=LOW」が標準だが、本機では HIGH をトリガーとして
+//  採用せざるを得なかった（再はんだ付けでの付け直しを避けるための妥協）。
+//  ※配線を直せる場合は、スイッチを正しい向きに付け直したうえで
+//    判定を == LOW に戻すのが本来あるべき形。
 //
 //  ---- 改善点（オリジナルからの差分） ----
 //   1. 開閉・ノック動作をヘルパー関数化（openLid / closeLid / poke）して重複を排除
@@ -116,7 +124,7 @@ void poke() {
 void setup() {
   randomSeed(analogRead(A0));  // 未接続ピンの浮遊ノイズをシードに使用（A0は何も繋がないこと）
 
-  pinMode(switchPin, INPUT_PULLUP);  // 外部回路により ON で HIGH（意図通りの論理）
+  pinMode(switchPin, INPUT_PULLUP);  // スイッチ逆付けのため HIGH をトリガーに採用（冒頭コメント参照）
 
   // 初期姿勢へ移動（MG996R が戻りきってから SG90 を閉じる順序を守る）
   lidServo.attach(lidPin);
