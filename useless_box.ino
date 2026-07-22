@@ -5,6 +5,12 @@
 //             Servo lid (フタ) → D5  SG90
 //             Servo arm (腕)   → D6  MG996R
 //             Switch            → D12 (INPUT_PULLUP / 論理反転・下記参照)
+//             7seg 2桁          → D2/D3/D4 経由で 74HC595 ×2（カスケード）
+//
+//  ---- ピン割り当ての方針 ----
+//  既存の駆動系（D5/D6/D12/A0）を最優先で維持し、後付けの7セグを空きピンへ寄せた。
+//  D10/D11 は DFPlayer Mini 用に予約（後で再配線しないため空けてある）。
+//  D7〜D9・D13 は将来の拡張（キャタピラー駆動など）用に残している。
 //
 //  ---- スイッチ論理 ----
 //  スイッチが物理的に逆向きに取り付けられているため
@@ -53,6 +59,96 @@ const int DEBOUNCE_MS = 20;
 //       Servoライブラリはattach時に前回write値でパルスを再開するためジャンプも起きない。
 //  0: 常時保持トルク（自重でずれる構造に変更した場合のみ）
 #define IDLE_DETACH 1
+
+// ============================================================
+//  7セグメント表示（A-552SRD 2桁 / 74HC595 ×2 カスケード）
+//
+//  ---- 駆動方式: スタティック点灯 ----
+//  595 を1個ずつ各桁に固定割り当てし、全セグメントを常時直接駆動する。
+//  ダイナミック点灯（1個で両桁を高速切替）は採用しない——本スケッチは
+//  delay() ブロッキング設計であり、動作中にリフレッシュを回せないため。
+//  ラッチした表示は次に書き換えるまで保持されるので、この方式なら
+//  delay(650) 等で止まっている間も表示は消えない。
+//
+//  ---- ビット順とテーブルについて ----
+//  test/count.ino と同一の規約を採用している（配線の互換性を保つため）。
+//  595 は「最初に送ったビットが QH まで押し出される」ので、MSBFIRST では
+//  bit0 が最後に出て QA に残る → bit0=a, bit1=b, … bit7=dp と対応する。
+//
+//  ---- 595 側の固定配線（コード外・忘れやすい）----
+//    OE   (13) → GND   出力を常時有効化
+//    SRCLR(10) → 5V    クリアを無効化
+//    VCC  (16) → 5V  ／ GND (8) → GND
+//    IC1 の QH'(9) → IC2 の DS(14)      ★カスケード線
+//    SH_CP / ST_CP は IC1・IC2 で共通接続
+//    各 QA〜QH → 470Ω → 7セグの a,b,c,d,e,f,g,dp
+//    7セグ コモン（14pin=DIG.1 / 13pin=DIG.2）→ 5V
+//
+//  ---- アノードコモンについて ----
+//  A-552SRD は COMMON ANODE。コモン側が＋なので、595 の出力が LOW の
+//  ときにセグメントへ電流が流れ込んで点灯する。よって送出時に ~ で反転する。
+//
+//  ---- 電流について ----
+//  74HC595 は 1ピン±35mA・チップ合計±70mA。桁ごとに 595 を分けているので
+//  1チップが受け持つのは最大7セグメント。470Ω・4.5V で 1セグ約5mA、
+//  "8" 表示でも 1チップ約35mA に収まる。暗く感じる場合は 330Ω まで
+//  下げてよい（約7mA/セグ、1チップ約50mA でまだ余裕がある）。
+// ============================================================
+const int dataPin  = 2;  // DS    (595 14ピン)
+const int clockPin = 3;  // SH_CP (595 11ピン) — IC1/IC2 共通
+const int latchPin = 4;  // ST_CP (595 12ピン) — IC1/IC2 共通
+
+// 0〜9の点灯パターン (Q0=A, Q1=B... と配線している前提)
+//   bit0=a, bit1=b, bit2=c, bit3=d, bit4=e, bit5=f, bit6=g, bit7=dp
+const byte digits[10] = {
+  0b00111111, // 0
+  0b00000110, // 1
+  0b01011011, // 2
+  0b01001111, // 3
+  0b01100110, // 4
+  0b01101101, // 5
+  0b01111101, // 6
+  0b00000111, // 7
+  0b01111111, // 8
+  0b01101111  // 9
+};
+const byte SEG_BLANK = 0b00000000;  // 全消灯
+
+// --- 動作完了後に押下回数（00〜99でラップ）を表示するか ---
+//  1: 動作中は case 番号、待機中は通算の押下回数を表示
+//  0: case 番号を出したまま次の起動まで保持
+#define SHOW_PRESS_COUNT 1
+
+// ------------------------------------------------------------
+//  両桁へ一括送出
+//  カスケードでは「先に送ったバイトが奥のIC2へ押し出され、
+//  後に送ったバイトが手前のIC1に留まる」ため、左桁→右桁の順で送る。
+//  左右が入れ替わって表示されたら、この2行を交換すればよい。
+// ------------------------------------------------------------
+void writeDigits(byte segLeft, byte segRight) {
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, MSBFIRST, ~segLeft);   // 先に送る → IC2（十の位・左）
+  shiftOut(dataPin, clockPin, MSBFIRST, ~segRight);  // 後に送る → IC1（一の位・右）
+  digitalWrite(latchPin, HIGH);                      // ラッチして2桁同時に反映
+}
+
+// 0〜99 を表示。leadingZero=false なら十の位が 0 のとき左桁を消灯する
+void showNumber(int n, bool leadingZero) {
+  n = constrain(n, 0, 99);
+  byte tens = n / 10;
+  byte ones = n % 10;
+  byte left = (tens == 0 && !leadingZero) ? SEG_BLANK : digits[tens];
+  writeDigits(left, digits[ones]);
+}
+
+void clearDisplay() { writeDigits(SEG_BLANK, SEG_BLANK); }
+
+void setupDisplay() {
+  pinMode(dataPin,  OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(latchPin, OUTPUT);
+  clearDisplay();
+}
 
 // ============================================================
 //  サーボの有効化／無効化
@@ -111,6 +207,8 @@ void setup() {
 
   pinMode(switchPin, INPUT_PULLUP);  // スイッチ逆付けのため HIGH をトリガーに採用（冒頭コメント参照）
 
+  setupDisplay();  // 7セグを消灯状態で初期化
+
   // 初期姿勢へ移動（MG996R が戻りきってから SG90 を閉じる順序を守る）
   lidServo.attach(lidPin);
   armServo.attach(armPin);
@@ -120,6 +218,10 @@ void setup() {
   delay(LID_MOVE_MS);
 
   disableServos();  // 初期化完了後はアイドル（IDLE_DETACH=1 のとき切り離し）
+
+#if SHOW_PRESS_COUNT
+  showNumber(0, true);  // 起動時は "00"
+#endif
 }
 
 // ============================================================
@@ -138,6 +240,8 @@ void loop() {
   int x;
   do { x = random(1, 6); } while (x == prev);
   prev = x;
+
+  showNumber(x, false);  // 動作中はどの case を演じているかを表示（左桁は消灯）
 
   switch (x) {
 
@@ -213,5 +317,13 @@ void loop() {
   }
 
   disableServos();  // アイドルへ戻す
+
+#if SHOW_PRESS_COUNT
+  // 待機中は通算の押下回数を表示（00〜99でラップ）
+  static unsigned int pressCount = 0;
+  pressCount++;
+  showNumber(pressCount % 100, true);
+#endif
+
   delay(100);       // 動作後のチャタリング防止
 }
