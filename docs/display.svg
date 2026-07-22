@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540">
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .tm { font-size: 12px; font-weight: 600; fill: #1a1a1a; }
+  .ts { font-size: 10px; fill: #555; }
+  .tp { font-size: 9px;  fill: #444; }
+  .tn { font-size: 10px; font-weight: 700; fill: #7a4e00; }
+  .box-ard { fill: #e8f7f1; stroke: #0F6E56; stroke-width: 1; }
+  .box-ic  { fill: #f0eefb; stroke: #5B4BA8; stroke-width: 1; }
+  .box-seg { fill: #fdeeee; stroke: #B03A3A; stroke-width: 1; }
+  .box-note{ fill: #fffbe8; stroke: #c89030; stroke-width: 1; }
+  .wdata  { stroke: #1e6eb5; stroke-width: 2;   fill: none; }
+  .wclk   { stroke: #C77B0A; stroke-width: 2;   fill: none; }
+  .wlatch { stroke: #0F8A6A; stroke-width: 2;   fill: none; }
+  .wbus   { stroke: #B03A3A; stroke-width: 3;   fill: none; }
+  .wcas   { stroke: #8E44AD; stroke-width: 2;   fill: none; }
+</style>
+<rect width="880" height="540" fill="#ffffff"/>
+
+<text x="440" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#111">
+  7セグ2桁 表示部 — 74HC595 ×2 カスケード
+</text>
+<text x="440" y="43" text-anchor="middle" font-size="10" fill="#999">
+  スタティック点灯（桁ごとに595を専有）／ A-552SRD はアノードコモン
+</text>
+
+<!-- ═══ Arduino ═══ -->
+<rect x="20" y="150" width="112" height="162" rx="8" class="box-ard"/>
+<text class="tm" x="76" y="176" text-anchor="middle">Arduino</text>
+<text class="ts" x="76" y="192" text-anchor="middle">UNO 3</text>
+<text class="tp" x="126" y="228" text-anchor="end">D2 →</text>
+<text class="tp" x="126" y="263" text-anchor="end">D3 →</text>
+<text class="tp" x="126" y="298" text-anchor="end">D4 →</text>
+
+<!-- ═══ IC1（手前・Arduino直結）═══ -->
+<rect x="212" y="150" width="150" height="162" rx="8" class="box-ic"/>
+<text class="tm" x="287" y="176" text-anchor="middle">74HC595 #1</text>
+<text class="ts" x="287" y="192" text-anchor="middle">手前・一の位</text>
+<text class="tp" x="220" y="228">DS (14)</text>
+<text class="tp" x="220" y="263">SH_CP (11)</text>
+<text class="tp" x="220" y="298">ST_CP (12)</text>
+<text class="tp" x="354" y="212" text-anchor="end">QA〜QG</text>
+<text class="tp" x="354" y="288" text-anchor="end">QH' (9)</text>
+
+<!-- ═══ IC2（奥・カスケード先）═══ -->
+<rect x="452" y="150" width="150" height="162" rx="8" class="box-ic"/>
+<text class="tm" x="527" y="176" text-anchor="middle">74HC595 #2</text>
+<text class="ts" x="527" y="192" text-anchor="middle">奥・十の位</text>
+<text class="tp" x="460" y="228">DS (14)</text>
+<text class="tp" x="460" y="263">SH_CP (11)</text>
+<text class="tp" x="460" y="298">ST_CP (12)</text>
+<text class="tp" x="594" y="243" text-anchor="end">QA〜QG</text>
+
+<!-- ═══ 7セグ A-552SRD ═══ -->
+<text x="770" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="#B03A3A">A-552SRD（2桁）</text>
+<!-- DIG.1 左桁 -->
+<rect x="680" y="150" width="80" height="120" rx="6" class="box-seg"/>
+<text class="tm" x="720" y="196" text-anchor="middle">DIG.1</text>
+<text class="ts" x="720" y="214" text-anchor="middle">左・十の位</text>
+<text class="tp" x="720" y="232" text-anchor="middle">コモン 14</text>
+<!-- DIG.2 右桁 -->
+<rect x="780" y="150" width="80" height="120" rx="6" class="box-seg"/>
+<text class="tm" x="820" y="196" text-anchor="middle">DIG.2</text>
+<text class="ts" x="820" y="214" text-anchor="middle">右・一の位</text>
+<text class="tp" x="820" y="232" text-anchor="middle">コモン 13</text>
+<!-- コモン → 5V -->
+<line x1="720" y1="270" x2="720" y2="292" class="wbus" stroke="#c93b2a" stroke-width="2"/>
+<line x1="820" y1="270" x2="820" y2="292" class="wbus" stroke="#c93b2a" stroke-width="2"/>
+<line x1="700" y1="292" x2="840" y2="292" stroke="#c93b2a" stroke-width="2" fill="none"/>
+<text class="tp" x="770" y="308" text-anchor="middle" fill="#c93b2a">コモン(アノード) → 5V</text>
+
+<!-- ═══ データ線 D2 → IC1 DS ═══ -->
+<line x1="132" y1="224" x2="212" y2="224" class="wdata"/>
+<circle cx="212" cy="224" r="3" fill="#1e6eb5"/>
+
+<!-- ═══ クロック D3 → 下を回して両IC ═══ -->
+<line x1="132" y1="259" x2="170" y2="259" class="wclk"/>
+<line x1="170" y1="259" x2="170" y2="368" class="wclk"/>
+<line x1="170" y1="368" x2="500" y2="368" class="wclk"/>
+<line x1="252" y1="368" x2="252" y2="312" class="wclk"/>
+<circle cx="252" cy="368" r="3.5" fill="#C77B0A"/>
+<line x1="500" y1="368" x2="500" y2="312" class="wclk"/>
+<text class="tp" x="330" y="363" fill="#C77B0A">SH_CP 共通（クロック）</text>
+
+<!-- ═══ ラッチ D4 → 下を回して両IC ═══ -->
+<line x1="132" y1="294" x2="150" y2="294" class="wlatch"/>
+<line x1="150" y1="294" x2="150" y2="400" class="wlatch"/>
+<line x1="150" y1="400" x2="540" y2="400" class="wlatch"/>
+<line x1="292" y1="400" x2="292" y2="312" class="wlatch"/>
+<circle cx="292" cy="400" r="3.5" fill="#0F8A6A"/>
+<line x1="540" y1="400" x2="540" y2="312" class="wlatch"/>
+<text class="tp" x="340" y="395" fill="#0F8A6A">ST_CP 共通（ラッチ）</text>
+
+<!-- ═══ カスケード IC1 QH'(9) → IC2 DS(14) ═══ -->
+<line x1="362" y1="284" x2="404" y2="284" class="wcas"/>
+<line x1="404" y1="284" x2="404" y2="224" class="wcas"/>
+<line x1="404" y1="224" x2="452" y2="224" class="wcas"/>
+<circle cx="452" cy="224" r="3" fill="#8E44AD"/>
+<text class="tp" x="408" y="256" fill="#8E44AD">カスケード</text>
+
+<!-- ═══ IC2 → DIG.1（十の位）═══ -->
+<line x1="602" y1="239" x2="628" y2="239" class="wbus"/>
+<line x1="648" y1="239" x2="680" y2="239" class="wbus"/>
+<rect x="628" y="232" width="20" height="14" fill="#fff" stroke="#B03A3A" stroke-width="1.5"/>
+<text class="tp" x="638" y="222" text-anchor="middle" fill="#B03A3A">470Ω×7</text>
+
+<!-- ═══ IC1 → DIG.2（一の位）上を回す ═══ -->
+<line x1="362" y1="208" x2="386" y2="208" class="wbus"/>
+<line x1="386" y1="208" x2="386" y2="76"  class="wbus"/>
+<line x1="386" y1="76"  x2="820" y2="76"  class="wbus"/>
+<line x1="820" y1="76"  x2="820" y2="118" class="wbus"/>
+<line x1="820" y1="138" x2="820" y2="150" class="wbus"/>
+<rect x="812" y="118" width="16" height="20" fill="#fff" stroke="#B03A3A" stroke-width="1.5"/>
+<text class="tp" x="600" y="70" text-anchor="middle" fill="#B03A3A">QA〜QG ─ 470Ω×7 ─→ DIG.2 の a〜g</text>
+
+<!-- ═══ 固定配線メモ ═══ -->
+<rect x="20" y="428" width="840" height="62" rx="6" class="box-note"/>
+<text class="tn" x="34" y="447">両IC共通の固定配線（コードに現れないので忘れやすい）</text>
+<text class="ts" x="34" y="464">OE (13) → GND ／ SRCLR (10) → 5V ／ VCC (16) → 5V ／ GND (8) → GND</text>
+<text class="ts" x="34" y="480">QA→a, QB→b, QC→c, QD→d, QE→e, QF→f, QG→g（この順で結線すること。QH=dp は未使用）</text>
+
+<!-- ═══ 凡例 ═══ -->
+<line x1="20" y1="512" x2="46" y2="512" class="wdata"/>
+<text class="ts" x="52" y="516">DS (D2)</text>
+<line x1="130" y1="512" x2="156" y2="512" class="wclk"/>
+<text class="ts" x="162" y="516">SH_CP (D3)</text>
+<line x1="250" y1="512" x2="276" y2="512" class="wlatch"/>
+<text class="ts" x="282" y="516">ST_CP (D4)</text>
+<line x1="376" y1="512" x2="402" y2="512" class="wcas"/>
+<text class="ts" x="408" y="516">カスケード</text>
+<line x1="496" y1="512" x2="522" y2="512" class="wbus"/>
+<text class="ts" x="528" y="516">セグメント（8本バス）</text>
+<line x1="676" y1="512" x2="702" y2="512" stroke="#c93b2a" stroke-width="2"/>
+<text class="ts" x="708" y="516">5V（コモン）</text>
+</svg>
