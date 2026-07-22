@@ -34,7 +34,7 @@
 ## ⚡ 回路
 
 <div align="center">
-<img src="docs/circuit.svg" width="860" alt="回路図">
+<img src="docs/circuit.svg" width="900" alt="回路図">
 </div>
 
 ### 部品構成
