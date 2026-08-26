@@ -1,5 +1,7 @@
 # DFPlayer Mini 単体テスト
 
+![DFPlayer 再生テスト](dfplayer_breadboard.jpg)
+
 音声再生モジュール **DFPlayer Mini** の動作確認用スケッチ。
 [useless-box](../../README.md) 本体とは独立して、配線・SD認識・再生を検証する。
 
