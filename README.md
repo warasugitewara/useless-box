@@ -409,7 +409,14 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 useless-box/
 ├── useless_box.ino      # メインスケッチ
 ├── test/
-│   └── count.ino        # 7セグ単体テスト（00〜99 カウントアップ）
+│   ├── 7seg/            # 7セグ単体テスト（00〜99 カウントアップ）
+│   │   ├── count.ino
+│   │   ├── README.md
+│   │   └── seg7_breadboard.jpg
+│   └── dfplayer/        # DFPlayer 単体テスト
+│       ├── dfplayer_test.ino
+│       ├── README.md
+│       └── dfplayer_breadboard.jpg
 ├── rc/                  # R/C クローラー（独立系統・ESP32）
 │   ├── README.md
 │   └── crawler_rc.ino   # 送信機・受信機 兼用（未実装）
@@ -421,9 +428,10 @@ useless-box/
 ```
 
 > [!NOTE]
-> `test/count.ino` は表示部の単体検証用で、ピン割り当てが本体と異なります
+> `test/7seg/count.ino` は表示部の単体検証用で、ピン割り当てが本体と異なります
 > （`D8`=ST_CP / `D12`=SH_CP / `D11`=DS）。本体へ移行する際は信号線3本を
 > `D2`/`D3`/`D4` へ挿し替えてください。595側の固定配線は変更不要です。
+> 各テストの詳細と配線写真は [`test/7seg/`](test/7seg/) ・ [`test/dfplayer/`](test/dfplayer/) を参照。
 
 ---
 
