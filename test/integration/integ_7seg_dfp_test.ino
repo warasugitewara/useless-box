@@ -12,6 +12,9 @@
 //  ---- ピン割り当て（本体 useless_box.ino と同一）----
 //    7seg  : D2=DS / D3=SH_CP / D4=ST_CP  → 74HC595 ×2（カスケード）
 //    DFP   : D10=DFのTX / D11=DFのRX(1kΩ直列)
+//    SW1-5 : D7,D8,D9,D12,D13（INPUT_PULLUP・押すとLOW）
+//            もう片側はGNDへ共通接続。抵抗不要。サーボ用D5/D6は避けている。
+//            タクトスイッチは対角の2足を使うこと。
 //
 //  ---- 595 側の固定配線（コード外・両ICに必要）----
 //    16(VCC)→5V / 8(GND)→GND / 13(OE)→GND / 10(SRCLR)→5V
@@ -28,6 +31,7 @@
 //    0    : 表示クリア＋停止
 //    +/-  : 音量調整
 //    ?    : 状態（ファイル数・音量）
+//    物理スイッチ SW1〜SW5: 押した瞬間に対応番号を発火（シリアルと併用）
 // ===================================================
 
 #include <SoftwareSerial.h>
@@ -49,6 +53,12 @@ const byte SEG_BLANK = 0b00000000;
 SoftwareSerial dfSerial(10, 11);  // RX=D10(DFのTXへ), TX=D11(DFのRXへ)
 DFRobotDFPlayerMini dfPlayer;
 int vol = 22;
+
+// ---- 物理スイッチ（1〜5に対応・押した瞬間に発火）----
+const int swPins[5] = {7, 8, 9, 12, 13};  // SW1..SW5
+bool swPrev[5];                            // 直前の読み値（HIGH=非押下）
+unsigned long swLastMs[5];                 // デバウンス用の最終変化時刻
+const unsigned long SW_DEBOUNCE = 25;      // ms
 
 // ============================================================
 //  7セグ表示
@@ -97,13 +107,37 @@ void setup() {
 
   randomSeed(analogRead(A0));  // A0未接続の浮遊ノイズをシードに
 
+  // 物理スイッチを INPUT_PULLUP で初期化（押すとLOW）
+  for (int i = 0; i < 5; i++) {
+    pinMode(swPins[i], INPUT_PULLUP);
+    swPrev[i]   = HIGH;
+    swLastMs[i] = 0;
+  }
+
   delay(150);
   Serial.print(F("SDファイル数 = ")); Serial.println(dfPlayer.readFileCounts());
   Serial.print(F("音量 = ")); Serial.println(vol);
   Serial.println(F("操作: 1-5=指定 / r=ランダム / 0=停止 / +,-=音量 / ?=状態"));
 }
 
+// 物理スイッチをスキャンし、HIGH→LOW の立ち下がりで発火（デバウンス付き）
+void scanSwitches() {
+  for (int i = 0; i < 5; i++) {
+    bool now = digitalRead(swPins[i]);
+    if (now != swPrev[i] && (millis() - swLastMs[i]) > SW_DEBOUNCE) {
+      swLastMs[i] = millis();
+      if (swPrev[i] == HIGH && now == LOW) {   // 押した瞬間だけ
+        Serial.print(F("[switch] SW")); Serial.println(i + 1);
+        fire(i + 1);                            // SW1→1 … SW5→5
+      }
+      swPrev[i] = now;
+    }
+  }
+}
+
 void loop() {
+  scanSwitches();
+
   if (Serial.available()) {
     char c = Serial.read();
     if (c == '\n' || c == '\r' || c == ' ') return;
