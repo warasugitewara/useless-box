@@ -387,9 +387,10 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 
 ## 🚧 TODO
 
-- [ ] **🔊 サウンド再生 — DFPlayer Mini**（単体テスト済み・次に着手予定）
+- [ ] **🔊 サウンド再生 — DFPlayer Mini**（7seg との統合テスト成功・本体組み込み待ち）
   - モジュール: DFPlayer Mini HW-247A（チップ **TD5580A**）＋ 8Ω 2W スピーカー
   - **単体テスト完了** → [`test/dfplayer/`](test/dfplayer/)。`playMp3Folder()` 方式（`/mp3/000x.mp3`）で再生確認
+  - **7seg との統合テスト成功** → [`test/integration/`](test/integration/)。Nano 上で表示＋再生の同時動作を確認
   - 音声: case ごとに `0001.mp3`〜`0005.mp3` を割り当て（5はミーム）。再生タイミングは動作の頭
   - 接続: `D10`(DFのTX) / `D11`(DFのRX・1kΩ直列) / VCC は電源A
   - **本体統合コードはローカルに作成済み**。実機での音出し・動作重なり確認をしてから push 予定
@@ -400,7 +401,8 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 - [ ] **🔌 Arduino Nano への移行**（次に着手予定）
   - 本体マイコンを UNO R3 → **Nano 互換機（CH340C・Type-C）** に載せ替え
   - 理由: 基板が小さく箱に収めやすい／Type-C で抜き差しが楽／在庫に余裕（Nano ×4）
-  - コードは互換（同 ATmega328P・同ピン番号）なのでそのまま動く。DFP 単体テストは Nano で再生確認済み
+  - コードは互換（同 ATmega328P・同ピン番号）なのでそのまま動く。7seg+DFP 統合テストも Nano で成功
+  - ⚠️ 書き込み時は **ツール → プロセッサ → 「ATmega328P (Old Bootloader)」** を選ぶこと（デフォルトだと `not in sync resp=0x00` で書き込めない）
   - 注意: Nano の A6/A7 は**アナログ入力専用**（`digitalWrite` 不可）。増えた2本はシード源や入力用に活用可
   - 7セグ（74HC595）と DFPlayer の本体統合を、この移行と同じタイミングで実施する
   - 統合コードはローカルに作成済み → 実機確認して問題なければ push
@@ -436,10 +438,14 @@ useless-box/
 │   │   ├── count.ino
 │   │   ├── README.md
 │   │   └── seg7_breadboard.jpg
-│   └── dfplayer/        # DFPlayer 単体テスト
-│       ├── dfplayer_test.ino
+│   ├── dfplayer/        # DFPlayer 単体テスト
+│   │   ├── dfplayer_test.ino
+│   │   ├── README.md
+│   │   └── dfplayer_breadboard.jpg
+│   └── integration/    # 7seg + DFPlayer 統合テスト
+│       ├── integ_7seg_dfp_test.ino
 │       ├── README.md
-│       └── dfplayer_breadboard.jpg
+│       └── integration_breadboard.jpg
 ├── rc/                  # R/C クローラー（独立系統・ESP32）
 │   ├── README.md
 │   └── crawler_rc.ino   # 送信機・受信機 兼用（未実装）
