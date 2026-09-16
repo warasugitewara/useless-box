@@ -409,7 +409,7 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 
 - [ ] **🦾 腕の自作パーツ** — FreeCAD でパラメトリック設計中
 
-- [ ] **プリント基板化（表示ボード）** — [`pcb/`](pcb/) で設計中。片面エッチング・ベタGND・7seg外出し。PCBE 清書 → エッチング予定
+- [ ] **プリント基板化（本体統合ボード）** — [`pcb/`](pcb/) で設計中。Nano・595×2・DFP・抵抗を1枚に、サーボ/スイッチ/7seg/2電源は端子で外出し。片面エッチング・ベタGND。PCBE 清書 → エッチング予定
 
 <details>
 <summary><b>🧰 手持ちマイコン在庫（役割分担）</b></summary>
@@ -446,11 +446,9 @@ useless-box/
 │       ├── integ_7seg_dfp_test.ino
 │       ├── README.md
 │       └── integration_breadboard.jpg
-├── pcb/                 # 表示ボード基板設計（PCBE・片面エッチング）
+├── pcb/                 # 本体統合ボード設計（PCBE・片面エッチング）
 │   ├── README.md
-│   ├── netlist.md       # 結線表
-│   ├── coords.md        # 座標表（PCBE配置用）
-│   └── placement.svg    # 部品配置ラフ図
+│   └── wiring.md        # ピンtoピン結線リスト
 ├── rc/                  # R/C クローラー（独立系統・ESP32）
 │   ├── README.md
 │   └── crawler_rc.ino   # 送信機・受信機 兼用（未実装）
