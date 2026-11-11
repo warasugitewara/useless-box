@@ -8,12 +8,13 @@
 
 <br>
 
-![Arduino](https://img.shields.io/badge/Arduino-UNO_3-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![Arduino](https://img.shields.io/badge/Arduino-Nano-00979D?style=for-the-badge&logo=arduino&logoColor=white)
 ![C++](https://img.shields.io/badge/C++-Arduino-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
 ![Status](https://img.shields.io/badge/status-working-2EA043?style=for-the-badge)
 
-![Servo](https://img.shields.io/badge/Servo-SG90_+_MG996R-orange?style=flat-square)
+![Servo](https://img.shields.io/badge/Servo-MG996R_×_2-orange?style=flat-square)
 ![Display](https://img.shields.io/badge/Display-7seg_×_74HC595-red?style=flat-square)
+![Sound](https://img.shields.io/badge/Sound-DFPlayer_Mini-yellow?style=flat-square)
 ![Power](https://img.shields.io/badge/Power-dual_rail-brightgreen?style=flat-square)
 ![RC](https://img.shields.io/badge/R%2FC-ESP--NOW_crawler-5B4BA8?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
@@ -31,7 +32,7 @@
 ## 📖 概要
 
 いわゆる **Useless Box / Useless Machine** の Arduino 実装です。
-押されたら押し返す、ただそれだけの動作を **5種類の性格** で演じ分けます。
+押されたら押し返す、ただそれだけの動作を **5種類の動き × 5種類の音 = 全25通り** で演じ分けます。
 
 ```
  押す  →  📦 フタが開く  →  🦾 腕が出る  →  👆 押し返す  →  📦 閉じる  →  ↺
@@ -46,7 +47,7 @@
 
 | | 🎁 本体（Useless Box） | 🕹️ R/C クローラー |
 |:--|:--|:--|
-| **マイコン** | Arduino UNO 3 | Freenove ESP32 × 2 |
+| **マイコン** | Arduino Nano 互換（UNO でも動作） | Freenove ESP32 × 2 |
 | **役割** | 押し返す動作・表示 | 無線操縦での走行 |
 | **電源** | 単三×3（4.5V）＋ 単三×4（6.0V） | 独立（ESP32・モーターで別系統） |
 | **ドキュメント** | このページ | [`rc/README.md`](rc/README.md) |
@@ -60,9 +61,10 @@
 
 | | |
 |:--|:--|
-| **マイコン** | Arduino UNO 3 |
-| **アクチュエータ** | SG90（フタ）／ MG996R（腕） |
-| **表示** | 7セグLED 2桁（74HC595 ×2 カスケード） |
+| **マイコン** | Arduino Nano 互換（UNO でも動作） |
+| **アクチュエータ** | MG996R ×2（フタ・腕） |
+| **表示** | 7セグLED 2桁（74HC595 ×2 カスケード・自作エッチング基板） |
+| **音声** | DFPlayer Mini ＋ 8Ω 2W スピーカー |
 | **電源** | 単三×3（4.5V）＋ 単三×4（6.0V）の2系統 |
 | **実装** | はんだ付け＋ホットボンドのクイックリリース空中配線 |
 
@@ -80,6 +82,10 @@
 | 4 | 待機中にサーボが発熱し、うなり音が出る | 保持トルクが常時かかっている | アイドル時に `detach()` で**脱力**（フタは縁掛かり構造で位置を維持） |
 | 5 | 7セグ2桁を直結するとピンが足りない | 2桁分で最大 14本のセグメント線が必要 | **74HC595 ×2 カスケード**で Arduino 側は **3ピン**に圧縮 |
 | 6 | ダイナミック点灯だと表示が破綻する | 本体が `delay()` ブロッキング設計でリフレッシュを回せない | **スタティック点灯**（桁ごとに595を専有）へ切り替え |
+| 7 | 7seg基板が何も表示しない | 参考にしていた図の 595 の 10番(SRCLR)/13番(OE) が逆だった | データシートで確認し **10番→5V・13番→GND** に修正 |
+| 8 | 基板の右桁で d と f が入れ替わった | エッチング基板の配線ミス | 基板は直さず **コード側で補正**（`PCB_DIG2_DF_SWAP`） |
+| 9 | 箱を木製にするとフタが重くなる | フタの重さが増え、小型の SG90 では余裕がない | フタも **MG996R** にし、電源B（単三×4）を2個で共用。9V角電池は電流が足りず不採用 |
+| 10 | ミーム音声（ファー）が出すぎる | 音を等確率で抽選していた | 音だけ **重み付き抽選** にして約 **1%** に |
 
 ---
 
@@ -93,15 +99,16 @@
 
 | パーツ | 型番 | 電源系統 | 役割 | ピン |
 |:-------|:-----|:--------:|:-----|:----:|
-| マイコン | Arduino UNO 3 | 🔴 A | 制御 | — |
-| サーボ（フタ） | SG90 | 🔴 A | フタの開閉 | `D5` |
+| マイコン | Arduino Nano 互換 | 🔴 A | 制御 | — |
+| サーボ（フタ） | MG996R | 🟢 B | フタの開閉 | `D5` |
 | サーボ（腕） | MG996R | 🟢 B | スイッチを押す腕 | `D6` |
 | スイッチ | — | — | トリガー入力 | `D12` |
-| 7セグLED | PARA LIGHT A-552SRD | 🔴 A | case番号・押下回数の表示 | — |
+| 7セグLED | PARA LIGHT A-552SRD | 🔴 A | 組み合わせ番号（01〜25）の表示 | — |
 | シフトレジスタ | UTC U74HC595A × 2 | 🔴 A | 7セグ駆動（カスケード） | `D2` `D3` `D4` |
-| 電源A | 単三電池 × 3本（4.5V） | — | Arduino・SG90・表示部 | — |
-| 電源B | 単三電池 × 4本（6.0V） | — | MG996R 専用 | — |
-| コンデンサ | 470µF × 2（並列） | 🟢 B | 起動スパイク吸収 | MG996R 根本 |
+| 音声 | DFPlayer Mini（HW-247A）＋ 8Ω 2W | 🔴 A | 効果音の再生 | `D10` `D11` |
+| 電源A | 単三電池 × 3本（4.5V） | — | Arduino・表示部・DFPlayer | — |
+| 電源B | 単三電池 × 4本（6.0V） | — | MG996R ×2 専用 | — |
+| コンデンサ | 470µF × 2（並列） | 🟢 B | 起動スパイク吸収 | MG996R 根本（2個とも） |
 
 ### ピン割り当て
 
@@ -110,11 +117,16 @@
 | ピン | 用途 | 区分 |
 |:----:|:-----|:----:|
 | `D2` `D3` `D4` | 74HC595（DS / SH_CP / ST_CP） | 表示 |
-| `D5` | SG90（フタ） | 駆動 |
+| `D5` | MG996R（フタ） | 駆動 |
 | `D6` | MG996R（腕） | 駆動 |
 | `D7` `D8` `D9` `D13` | **空き** | — |
-| `D10` `D11` | DFPlayer Mini 用に**予約** | 予約 |
+| `D10` | DFPlayer TX → Arduino | 音声 |
+| `D11` | Arduino → 1kΩ → DFPlayer RX | 音声 |
 | `D12` | トリガースイッチ | 駆動 |
+
+> [!NOTE]
+> 基板（[`pcb/wiring.md`](pcb/wiring.md)）では配線の都合で `D11` と `D12` を入れ替える予定です。
+> コードの `#define PIN_LAYOUT_PCB 1` で、スイッチ=`D11`・DFPlayer RX=`D12` に切り替わります。
 | `A0` | randomSeed 用（**未接続を維持**） | 制御 |
 
 <details>
@@ -127,8 +139,8 @@ Arduino がブラウンアウトリセットしてしまい、動作が途中で
 
 | 系統 | 電池 | 電圧 | 給電対象 |
 |:----:|:-----|:----:|:---------|
-| 🔴 A | 単三 × 3 | 4.5V | Arduino UNO 3・SG90・表示部 |
-| 🟢 B | 単三 × 4 | 6.0V | MG996R のみ |
+| 🔴 A | 単三 × 3 | 4.5V | Arduino・表示部・DFPlayer |
+| 🟢 B | 単三 × 4 | 6.0V | MG996R ×2（フタ・腕）のみ |
 
 電源を分けることで、MG996R の突入電流が制御系の電圧に影響しなくなります。
 6.0V は MG996R の定格範囲（4.8〜7.2V）に収まっており、4.8V 時より動作も速くなります。
@@ -164,7 +176,8 @@ Arduino がブラウンアウトリセットしてしまい、動作が途中で
 <img src="docs/display.svg" width="880" alt="7セグ表示部の配線">
 </div>
 
-動作中は実行中の **case 番号**、待機中は通算の **押下回数**（00〜99）を表示します。
+動作中は **組み合わせ番号（01〜25）** を表示し、次に動くまでそのまま保持します。
+`#define SHOW_PRESS_COUNT 1` にすると、待機中は動いた回数（00〜99）の表示に切り替わります。
 
 > [!IMPORTANT]
 > **両ICの固定配線を忘れないこと。** コードに現れないため見落としがちです。
@@ -262,6 +275,26 @@ void writeDigits(byte segLeft, byte segRight) {
 電源投入ごとに `randomSeed(analogRead(A0))` でシードが変わるため毎回異なる順序になり、
 さらに直前と同じ case を引いた場合は再抽選して同一演出の連続を避けています。
 
+### 🔊 音との組み合わせ（全25通り）
+
+音（`/mp3/0001.mp3`〜`0005.mp3`）は**動きとは別に抽選**し、7セグには組み合わせ番号を表示します。
+
+**組み合わせ番号 =（動きの番号 − 1）× 5 + 音の番号**
+
+| | 音1 | 音2 | 音3 | 音4 | 音5 |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| **動き1** | 01 | 02 | 03 | 04 | 05 |
+| **動き2** | 06 | 07 | 08 | 09 | 10 |
+| **動き3** | 11 | 12 | 13 | 14 | 15 |
+| **動き4** | 16 | 17 | 18 | 19 | 20 |
+| **動き5** | 21 | 22 | 23 | 24 | 25 |
+
+音5はミーム音声のため、重み付き抽選で出る確率を約 **1%** に下げています。
+
+```cpp
+const byte SOUND_WEIGHT[5] = {99, 99, 99, 99, 4};  // 音5 = 4 / 400 = 1%
+```
+
 ---
 
 ## 💻 コード設計
@@ -274,7 +307,7 @@ const int lidOpen      = 3;    // フタが開く角度
 const int armRetracted = 3;    // 腕が格納された角度
 const int armExtended  = 110;  // 腕が伸びた角度
 
-const int LID_MOVE_MS = 200;   // SG90   : 90° 動ききる余裕時間
+const int LID_MOVE_MS = 300;   // MG996R : 90° 動ききる余裕時間
 const int ARM_MOVE_MS = 420;   // MG996R : 110° 動ききる余裕時間
 ```
 
@@ -283,7 +316,7 @@ const int ARM_MOVE_MS = 420;   // MG996R : 110° 動ききる余裕時間
 
 | サーボ | カタログ速度 | 実必要時間 | 設定値 |
 |:-------|:------------:|:----------:|:------:|
-| SG90（フタ 90°） | 0.1s/60° | ≈150ms | 200ms |
+| MG996R（フタ 90°） | 0.17s/60° @4.8V | ≈255ms | 300ms |
 | MG996R（腕 110°） | 0.17s/60° @4.8V | ≈311ms | 420ms |
 
 > [!TIP]
@@ -305,7 +338,7 @@ void sweep(Servo &s, int from, int to, int stepDelay) {
 }
 ```
 
-SG90 を 1° ずつ動かすことで「ためらい」「フェイント」を表現します。
+フタを 1° ずつ動かすことで「ためらい」「フェイント」を表現します。
 `stepDelay` が演技の速度そのものになります。
 
 | stepDelay | 90°あたり | 印象 |
@@ -314,7 +347,7 @@ SG90 を 1° ずつ動かすことで「ためらい」「フェイント」を�
 | 10 ms/度 | 約 900ms | 標準 |
 | 15 ms/度 | 約 1350ms | ためらい・逡巡 |
 
-MG996R はトルクが強く途中停止が不安定なため、`write()` 直接制御のみを使用しています。
+どの stepDelay も MG996R の最高速（約 2.8ms/度）より遅いため、フタの MG996R でも追従できます。
 
 </details>
 
@@ -359,6 +392,20 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 
 </details>
 
+<details>
+<summary><b>🧪 シリアルからの動作確認</b></summary>
+
+<br>
+
+シリアルモニタ（9600bps）で `1`〜`5` を送ると、その番号の動き（音も同じ番号）を強制実行します。
+乱数に頼らず全パターンを順に確認できます。実行内容は `動き 3 / 音 2 → 組み合わせ 12` のように表示されます。
+
+> [!WARNING]
+> スイッチ未接続だと `D12` が HIGH（＝押された扱い）になり動き続けます。
+> スイッチを付けずに試すときは `D12` を GND に落としてください。
+
+</details>
+
 ---
 
 ## 🕹️ R/C クローラー
@@ -387,7 +434,12 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
 
 ## 🚧 TODO
 
-- [ ] **🔊 サウンド再生 — DFPlayer Mini**（7seg との統合テスト成功・本体組み込み待ち）
+- [ ] **📦 箱（木製）への組み込みと調整**
+  - 回路とコードは机上で通し動作を確認済み（Nano ＋ 7seg基板 ＋ DFPlayer ＋ MG996R ×2 ＋ スイッチ）
+  - 箱が完成したら **角度（`lidOpen` / `lidClosed` / `armExtended` など）と待機時間を合わせ直す**
+  - フタ側の角度は SG90 時代の値のままなので、最初はゆっくり確認すること
+
+- [x] **🔊 サウンド再生 — DFPlayer Mini**（本体に組み込み済み）
   - モジュール: DFPlayer Mini HW-247A（チップ **TD5580A**）＋ 8Ω 2W スピーカー
   - **単体テスト完了** → [`test/dfplayer/`](test/dfplayer/)。`playMp3Folder()` 方式（`/mp3/000x.mp3`）で再生確認
   - **7seg との統合テスト成功** → [`test/integration/`](test/integration/)。Nano 上で表示＋再生の同時動作を確認
@@ -398,7 +450,7 @@ MG996R はトルクが強く途中停止が不安定なため、`write()` 直接
   - パスコン追加（鳴らしてノイズが出たら）: DFPlayer VCC-GND 直近に 100µF電解 + 0.1µFセラミック
   - ノイズ評価 → パスコン有無の比較（研究レポート題材）
 
-- [ ] **🔌 Arduino Nano への移行**（次に着手予定）
+- [x] **🔌 Arduino Nano への移行**（本体の通し動作を Nano で確認済み）
   - 本体マイコンを UNO R3 → **Nano 互換機（CH340C・Type-C）** に載せ替え
   - 理由: 基板が小さく箱に収めやすい／Type-C で抜き差しが楽／在庫に余裕（Nano ×4）
   - コードは互換（同 ATmega328P・同ピン番号）なのでそのまま動く。7seg+DFP 統合テストも Nano で成功
@@ -442,13 +494,21 @@ useless-box/
 │   │   ├── dfplayer_test.ino
 │   │   ├── README.md
 │   │   └── dfplayer_breadboard.jpg
-│   └── integration/    # 7seg + DFPlayer 統合テスト
-│       ├── integ_7seg_dfp_test.ino
-│       ├── README.md
-│       └── integration_breadboard.jpg
+│   ├── integration/    # 7seg + DFPlayer 統合テスト
+│   │   ├── integ_7seg_dfp_test.ino
+│   │   ├── README.md
+│   │   └── integration_breadboard.jpg
+│   ├── pcb_7seg_test/   # 7seg エッチング基板の検証（シリアル操作）
+│   │   ├── pcb_7seg_test.ino
+│   │   └── README.md
+│   └── mg996r_dual_test/ # MG996R ×2 の同時運用テスト
+│       ├── mg996r_dual_test.ino
+│       └── README.md
 ├── pcb/                 # 本体統合ボード設計（PCBE・片面エッチング）
 │   ├── README.md
-│   └── wiring.md        # ピンtoピン結線リスト
+│   ├── wiring.md        # ピンtoピン結線リスト
+│   ├── 7seg.pcb         # 7seg部の PCBE データ
+│   └── 7seg_pcbe.png
 ├── rc/                  # R/C クローラー（独立系統・ESP32）
 │   ├── README.md
 │   └── crawler_rc.ino   # 送信機・受信機 兼用（未実装）
@@ -472,7 +532,7 @@ useless-box/
 | | |
 |:--|:--|
 | **MG996R の動作電圧** | 4.8〜7.2V（電源Bの 6.0V は範囲内） |
-| **MG996R の突入電流** | 最大 2.5A — 電源系統の分離が必須 |
+| **MG996R の突入電流** | 最大 2.5A（1個あたり）— 電源系統の分離が必須。2個とも電源Bから取る |
 | **74HC595 の出力上限** | チップ合計 ±70mA — セグメント抵抗を 330Ω より小さくしないこと |
 | **GND 共通** | 電池A・B の GND は必ず繋ぐこと |
 | **`A0` ピン** | 何も接続しない（ランダムシード用） |
