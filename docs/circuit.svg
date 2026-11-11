@@ -38,7 +38,7 @@
 <text class="tm" x="58" y="98"  text-anchor="middle">電池A</text>
 <text class="ts" x="58" y="114" text-anchor="middle">単三 × 3本</text>
 <text class="ts" x="58" y="130" text-anchor="middle">4.5V</text>
-<text class="tq" x="58" y="146" text-anchor="middle">Arduino・SG90・表示部</text>
+<text class="tq" x="52" y="146" text-anchor="middle" font-size="8.5">制御・表示・音</text>
 <text class="tp" x="100" y="92"  text-anchor="end" fill="#c93b2a">R+</text>
 <text class="tp" x="100" y="146" text-anchor="end">B−</text>
 
@@ -58,7 +58,7 @@
 <text class="tm" x="58" y="240" text-anchor="middle">電池B</text>
 <text class="ts" x="58" y="256" text-anchor="middle">単三 × 4本</text>
 <text class="ts" x="58" y="272" text-anchor="middle">6.0V</text>
-<text class="tq" x="58" y="290" text-anchor="middle">MG996R 専用</text>
+<text class="tq" x="58" y="290" text-anchor="middle">MG996R×2</text>
 <text class="tp" x="100" y="234" text-anchor="end" fill="#1a6e2a">R+</text>
 <text class="tp" x="100" y="290" text-anchor="end">B−</text>
 
@@ -75,7 +75,7 @@
 
 <!-- ══════════ Arduino ══════════ -->
 <rect x="200" y="45" width="150" height="390" rx="8" class="box-ard"/>
-<text class="tm" x="275" y="70" text-anchor="middle">Arduino UNO 3</text>
+<text class="tm" x="275" y="70" text-anchor="middle">Arduino Nano</text>
 <text class="tp" x="208" y="89"  fill="#c93b2a">← 5V</text>
 <text class="tp" x="208" y="422">← GND</text>
 <text class="tp" x="342" y="89"  text-anchor="end">5V  →</text>
@@ -95,10 +95,10 @@
 <circle cx="535" cy="418" r="4" fill="#333"/>
 
 <!-- ══════════ バス ══════════ -->
-<line x1="475" y1="70"  x2="475" y2="226" class="wbus5v"/>
+<line x1="475" y1="70"  x2="475" y2="140" class="wbus5v"/>
 <text class="tb" x="475" y="62" text-anchor="middle" fill="#c93b2a">5V</text>
-<line x1="505" y1="276" x2="505" y2="470" class="wbus6v"/>
-<text class="tb" x="505" y="268" text-anchor="middle" fill="#1a6e2a">6V</text>
+<line x1="505" y1="208" x2="505" y2="470" class="wbus6v"/>
+<text class="tb" x="498" y="250" text-anchor="end" fill="#1a6e2a">6V</text>
 <line x1="535" y1="70"  x2="535" y2="502" class="wbusgnd"/>
 <text class="tb" x="535" y="62" text-anchor="middle" fill="#333">GND</text>
 
@@ -126,20 +126,20 @@
 <line x1="535" y1="150" x2="570" y2="150" class="wgnd"/>
 <circle cx="535" cy="150" r="4" fill="#333"/>
 
-<!-- ══════════ SG90（D5）══════════ -->
+<!-- ══════════ MG996R フタ（D5）══════════ -->
 <rect x="570" y="180" width="300" height="56" rx="8" class="box-srv"/>
-<text class="tm" x="720" y="204" text-anchor="middle">SG90（フタ）</text>
-<text class="ts" x="720" y="222" text-anchor="middle">オレンジ：信号　赤：VCC 5V　茶：GND</text>
+<text class="tm" x="720" y="204" text-anchor="middle">MG996R（フタ）</text>
+<text class="ts" x="720" y="222" text-anchor="middle">黄：信号　赤：VCC 6V　茶：GND</text>
 
 <line x1="350" y1="234" x2="411" y2="234" class="wsig"/>
 <line x1="411" y1="234" x2="411" y2="194" class="wsig"/>
 <line x1="411" y1="194" x2="570" y2="194" class="wsig"/>
-<line x1="475" y1="208" x2="570" y2="208" class="w5v"/>
-<circle cx="475" cy="208" r="4" fill="#c93b2a"/>
+<line x1="505" y1="208" x2="570" y2="208" class="w6v"/>
+<circle cx="505" cy="208" r="4" fill="#1a6e2a"/>
 <line x1="535" y1="224" x2="570" y2="224" class="wgnd"/>
 <circle cx="535" cy="224" r="4" fill="#333"/>
 
-<!-- ══════════ MG996R（D6）══════════ -->
+<!-- ══════════ MG996R 腕（D6）══════════ -->
 <rect x="570" y="256" width="300" height="56" rx="8" class="box-srv"/>
 <text class="tm" x="720" y="280" text-anchor="middle">MG996R（腕）</text>
 <text class="ts" x="720" y="298" text-anchor="middle">黄：信号　赤：VCC 6V　茶：GND</text>
@@ -173,7 +173,7 @@
 <line x1="589" y1="356" x2="652" y2="356" class="cap"/>
 <text class="tq" x="575" y="353" fill="#8a5000">+</text>
 <text class="tq" x="647" y="353">−</text>
-<text class="tq" x="700" y="344" fill="#8a5000">MG996R 根本に並列接続</text>
+<text class="tq" x="700" y="344" fill="#8a5000">各 MG996R 根本に並列接続</text>
 
 <!-- ══════════ スイッチ（D12）══════════ -->
 <rect x="570" y="382" width="300" height="52" rx="8" class="box-sw"/>
