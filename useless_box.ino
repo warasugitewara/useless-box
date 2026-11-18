@@ -277,6 +277,11 @@ void disableServos() {
 #if IDLE_DETACH
   lidServo.detach();
   armServo.detach();
+  // Servo ライブラリは、パルスが HIGH の最中に detach すると LOW に戻さない
+  // （割り込み側が「無効なピン」を LOW に書かないため）。
+  // 信号線が HIGH のまま残るとサーボが待機中にジリジリ鳴るので、明示的に LOW へ戻す。
+  digitalWrite(lidPin, LOW);
+  digitalWrite(armPin, LOW);
 #endif
 }
 
