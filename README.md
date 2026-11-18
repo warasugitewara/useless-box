@@ -380,6 +380,9 @@ void sweep(Servo &s, int from, int to, int stepDelay) {
 また Servo ライブラリは `attach()` 時に前回の `write()` 値でパルスを再開するので、
 復帰時に勝手に動く（ジャンプする）こともありません。
 
+ただし Servo ライブラリは、パルスが HIGH の最中に `detach()` すると信号線を LOW に戻しません。
+HIGH のまま残ると待機中に MG996R がジリジリ鳴るため、`detach()` の直後に `digitalWrite(LOW)` で戻しています。
+
 自重でずれる構造に変更した場合は `0` にして常時保持へ切り替えてください。
 
 </details>
@@ -469,12 +472,18 @@ void sweep(Servo &s, int from, int to, int stepDelay) {
   - コードは互換（同 ATmega328P・同ピン番号）なのでそのまま動く。7seg+DFP 統合テストも Nano で成功
   - ⚠️ 書き込み時は **ツール → プロセッサ → 「ATmega328P (Old Bootloader)」** を選ぶこと（デフォルトだと `not in sync resp=0x00` で書き込めない）
   - 注意: Nano の A6/A7 は**アナログ入力専用**（`digitalWrite` 不可）。増えた2本はシード源や入力用に活用可
-  - 7セグ（74HC595）と DFPlayer の本体統合を、この移行と同じタイミングで実施する
-  - 統合コードはローカルに作成済み → 実機確認して問題なければ push
+  - 7セグ（74HC595）・DFPlayer・MG996R ×2 を組み込んだ本体コードで、通し動作を確認済み
 
 - [ ] **🦾 腕の自作パーツ** — FreeCAD でパラメトリック設計中
 
-- [ ] **プリント基板化（本体統合ボード）** — [`pcb/`](pcb/) で設計中。Nano・595×2・DFP・抵抗を1枚に、サーボ/スイッチ/7seg/2電源は端子で外出し。片面エッチング・ベタGND。PCBE 清書 → エッチング予定
+- [ ] **プリント基板化（本体統合ボード）** — [`pcb/`](pcb/) で設計中。Nano・595×2・DFP・抵抗を1枚に、サーボ/スイッチ/7seg/2電源は端子で外出し。片面エッチング・ベタGND
+  - [x] **7seg部**（595 ×2 ＋ 抵抗 ＋ パスコン）: エッチング・実装済み、Nano で動作確認済み → [`test/pcb_7seg_test/`](test/pcb_7seg_test/)
+  - [ ] 残り（Nano・DFPlayer・端子・コンデンサ）: 結線は [`pcb/wiring.md`](pcb/wiring.md) にまとめ済み
+
+- [ ] **🚗 R/C との連携（検討中・R/C の進み具合次第）**
+  - case に応じて R/C を走らせる案。Nano の空きピン `A1`〜`A4` で 0〜15 の番号を送り、R/C 側の ESP32 がパターンを実行
+  - Nano（5V）→ ESP32（3.3V）は抵抗分圧（10kΩ＋20kΩ）で電圧を下げ、GND を共通にする
+  - 物理スイッチ（`A5`）で R/C 連携の ON/OFF を切り替える
 
 <details>
 <summary><b>🧰 手持ちマイコン在庫（役割分担）</b></summary>
