@@ -1,16 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" xmlns:c2pa="http://c2pa.org/manifest">
 <style>
   text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
   .tm  { font-size: 12px; font-weight: 600; fill: #1a1a1a; }
   .ts  { font-size: 10px; fill: #555; }
   .tp  { font-size: 10px; fill: #444; }
   .tq  { font-size: 9px;  fill: #777; }
-  .tn  { font-size: 10px; font-weight: 700; fill: #7a4e00; }
+  .tn  { font-size: 9px; font-weight: 700; fill: #7a4e00; }
   .tb  { font-size: 11px; font-weight: 700; }
   .box-ard  { fill: #e8f7f1; stroke: #0F6E56; stroke-width: 1; }
   .box-srv  { fill: #e8f2fb; stroke: #185FA5; stroke-width: 1; }
   .box-sw   { fill: #f2f2f0; stroke: #666;    stroke-width: 1; }
   .box-disp { fill: #fdeeee; stroke: #B03A3A; stroke-width: 1; }
+  .box-dfp  { fill: #fff7e6; stroke: #b07a10; stroke-width: 1; }
   .box-batA { fill: #fdf8ed; stroke: #8a6020; stroke-width: 1; }
   .box-batB { fill: #edf8ed; stroke: #1a6e2a; stroke-width: 1.5; }
   .w5v     { stroke: #c93b2a; stroke-width: 2;   fill: none; }
@@ -21,15 +22,16 @@
   .wbusgnd { stroke: #333;    stroke-width: 2.5; fill: none; }
   .wsig    { stroke: #1e6eb5; stroke-width: 1.5; fill: none; stroke-dasharray: 6,3; }
   .cap     { stroke: #8a5000; stroke-width: 2.5; fill: none; }
-  .cap-box { fill: #fffbe8; stroke: #c89030; stroke-width: 1.5; stroke-dasharray: 4,3; }
+  .capl    { stroke: #8a5000; stroke-width: 1.5; fill: none; }
+  .res     { fill: #fff; stroke: #1e6eb5; stroke-width: 1.5; }
 </style>
-<rect width="900" height="600" fill="#ffffff"/>
+<rect width="900" height="680" fill="#ffffff"/>
 
 <text x="450" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#111">
   useless-box 回路図（2電源構成）
 </text>
 <text x="450" y="42" text-anchor="middle" font-size="10" fill="#999">
-  右側ブロックは Arduino のピン順に並べてある（信号線が交差しないように）
+  右側ブロックは Arduino のピン順に並べてある（信号線が交差しないように）／ コンデンサは各部品の根元に付ける
 </text>
 
 <!-- ══════════ 電源A ══════════ -->
@@ -42,15 +44,23 @@
 <text class="tp" x="100" y="92"  text-anchor="end" fill="#c93b2a">R+</text>
 <text class="tp" x="100" y="146" text-anchor="end">B−</text>
 
-<rect x="115" y="72" width="54" height="26" rx="5" class="box-sw"/>
-<text class="ts" x="142" y="89" text-anchor="middle">主SW</text>
+<rect x="112" y="72" width="50" height="26" rx="5" class="box-sw"/>
+<text class="ts" x="137" y="89" text-anchor="middle">主SW</text>
 
-<line x1="100" y1="85" x2="115" y2="85" class="w5v"/>
-<line x1="169" y1="85" x2="200" y2="85" class="w5v"/>
-
+<line x1="100" y1="85" x2="112" y2="85" class="w5v"/>
+<line x1="162" y1="85" x2="200" y2="85" class="w5v"/>
 <line x1="100" y1="142" x2="185" y2="142" class="wgnd"/>
-<line x1="185" y1="142" x2="185" y2="418" class="wgnd"/>
-<line x1="185" y1="418" x2="200" y2="418" class="wgnd"/>
+<line x1="185" y1="142" x2="185" y2="500" class="wgnd"/>
+<line x1="185" y1="500" x2="200" y2="500" class="wgnd"/>
+
+<!-- 電源A 入口のコンデンサ（R+ と GND の間） -->
+<circle cx="176" cy="85" r="3" fill="#c93b2a"/>
+<line x1="176" y1="85"  x2="176" y2="110" class="capl"/>
+<line x1="168" y1="110" x2="184" y2="110" class="cap"/>
+<line x1="168" y1="116" x2="184" y2="116" class="cap"/>
+<line x1="176" y1="116" x2="176" y2="142" class="capl"/>
+<circle cx="176" cy="142" r="3" fill="#333"/>
+<text class="tn" x="166" y="126" text-anchor="end">100〜220µF</text>
 
 <!-- ══════════ 電源B ══════════ -->
 <text x="58" y="208" text-anchor="middle" font-size="10" font-weight="700" fill="#1a6e2a">電源B 6V</text>
@@ -62,65 +72,64 @@
 <text class="tp" x="100" y="234" text-anchor="end" fill="#1a6e2a">R+</text>
 <text class="tp" x="100" y="290" text-anchor="end">B−</text>
 
-<!-- 電池B R+ → Arduino の下を回して 6Vバスへ（ブロックを貫通しない経路）-->
+<!-- 電池B R+ → Arduino の下を回して 6Vバスへ -->
 <line x1="100" y1="230" x2="155" y2="230" class="w6v"/>
-<line x1="155" y1="230" x2="155" y2="470" class="w6v"/>
-<line x1="155" y1="470" x2="505" y2="470" class="w6v"/>
+<line x1="155" y1="230" x2="155" y2="548" class="w6v"/>
+<line x1="155" y1="548" x2="505" y2="548" class="w6v"/>
+<circle cx="505" cy="548" r="4" fill="#1a6e2a"/>
 <!-- 電池B GND → さらに下を回して GNDバスへ -->
 <line x1="100" y1="286" x2="136" y2="286" class="wgnd"/>
-<line x1="136" y1="286" x2="136" y2="502" class="wgnd"/>
-<line x1="136" y1="502" x2="535" y2="502" class="wgnd"/>
-<circle cx="505" cy="470" r="4" fill="#1a6e2a"/>
-<circle cx="535" cy="502" r="4" fill="#333"/>
+<line x1="136" y1="286" x2="136" y2="576" class="wgnd"/>
+<line x1="136" y1="576" x2="535" y2="576" class="wgnd"/>
+<circle cx="535" cy="576" r="4" fill="#333"/>
 
 <!-- ══════════ Arduino ══════════ -->
-<rect x="200" y="45" width="150" height="390" rx="8" class="box-ard"/>
+<rect x="200" y="45" width="150" height="470" rx="8" class="box-ard"/>
 <text class="tm" x="275" y="70" text-anchor="middle">Arduino Nano</text>
 <text class="tp" x="208" y="89"  fill="#c93b2a">← 5V</text>
-<text class="tp" x="208" y="422">← GND</text>
+<text class="tp" x="208" y="504">← GND</text>
 <text class="tp" x="342" y="89"  text-anchor="end">5V  →</text>
 <text class="tp" x="342" y="134" text-anchor="end">D2  →</text>
 <text class="tp" x="342" y="162" text-anchor="end">D3  →</text>
 <text class="tp" x="342" y="190" text-anchor="end">D4  →</text>
 <text class="tp" x="342" y="234" text-anchor="end">D5  →</text>
-<text class="tp" x="342" y="279" text-anchor="end">D6  →</text>
-<text class="tp" x="342" y="322" text-anchor="end">A0</text>
-<text class="tq" x="342" y="334" text-anchor="end">(未接続)</text>
-<text class="tp" x="342" y="362" text-anchor="end">D12 →</text>
-<text class="tp" x="342" y="422" text-anchor="end">GND →</text>
+<text class="tp" x="342" y="290" text-anchor="end">D6  →</text>
+<text class="tp" x="342" y="352" text-anchor="end">D10 ←</text>
+<text class="tp" x="342" y="370" text-anchor="end">D11 →</text>
+<text class="tp" x="342" y="414" text-anchor="end">A0</text>
+<text class="tq" x="342" y="426" text-anchor="end">(未接続)</text>
+<text class="tp" x="342" y="462" text-anchor="end">D12 →</text>
+<text class="tp" x="342" y="504" text-anchor="end">GND →</text>
 
 <line x1="350" y1="85"  x2="475" y2="85"  class="w5v"/>
 <circle cx="475" cy="85" r="4" fill="#c93b2a"/>
-<line x1="350" y1="418" x2="535" y2="418" class="wgnd"/>
-<circle cx="535" cy="418" r="4" fill="#333"/>
+<line x1="350" y1="500" x2="535" y2="500" class="wgnd"/>
+<circle cx="535" cy="500" r="4" fill="#333"/>
 
 <!-- ══════════ バス ══════════ -->
-<line x1="475" y1="70"  x2="475" y2="140" class="wbus5v"/>
+<line x1="475" y1="70"  x2="475" y2="392" class="wbus5v"/>
 <text class="tb" x="475" y="62" text-anchor="middle" fill="#c93b2a">5V</text>
-<line x1="505" y1="208" x2="505" y2="470" class="wbus6v"/>
+<line x1="505" y1="208" x2="505" y2="548" class="wbus6v"/>
 <text class="tb" x="498" y="250" text-anchor="end" fill="#1a6e2a">6V</text>
-<line x1="535" y1="70"  x2="535" y2="502" class="wbusgnd"/>
+<line x1="535" y1="70"  x2="535" y2="576" class="wbusgnd"/>
 <text class="tb" x="535" y="62" text-anchor="middle" fill="#333">GND</text>
 
 <!-- ══════════ 7セグ表示部（D2/D3/D4）══════════ -->
 <rect x="570" y="56" width="300" height="104" rx="8" class="box-disp"/>
-<text class="tm" x="720" y="80" text-anchor="middle">7セグ表示部</text>
+<text class="tm" x="720" y="80" text-anchor="middle">7セグ表示部（自作基板）</text>
 <text class="ts" x="720" y="98" text-anchor="middle">74HC595 × 2（カスケード）+ A-552SRD</text>
-<text class="tq" x="720" y="116" text-anchor="middle">DS / SH_CP / ST_CP ＋ VCC・GND</text>
+<text class="tq" x="720" y="116" text-anchor="middle">DS / SH_CP / ST_CP ＋ VCC・GND（595 に 0.1µF 実装済み）</text>
 <text class="tq" x="720" y="140" text-anchor="middle" fill="#B03A3A">詳細な結線は docs/display.svg を参照</text>
 
 <line x1="350" y1="130" x2="366" y2="130" class="wsig"/>
 <line x1="366" y1="130" x2="366" y2="82"  class="wsig"/>
 <line x1="366" y1="82"  x2="570" y2="82"  class="wsig"/>
-
 <line x1="350" y1="158" x2="381" y2="158" class="wsig"/>
 <line x1="381" y1="158" x2="381" y2="98"  class="wsig"/>
 <line x1="381" y1="98"  x2="570" y2="98"  class="wsig"/>
-
 <line x1="350" y1="186" x2="396" y2="186" class="wsig"/>
 <line x1="396" y1="186" x2="396" y2="114" class="wsig"/>
 <line x1="396" y1="114" x2="570" y2="114" class="wsig"/>
-
 <line x1="475" y1="132" x2="570" y2="132" class="w5v"/>
 <circle cx="475" cy="132" r="4" fill="#c93b2a"/>
 <line x1="535" y1="150" x2="570" y2="150" class="wgnd"/>
@@ -131,78 +140,105 @@
 <text class="tm" x="720" y="204" text-anchor="middle">MG996R（フタ）</text>
 <text class="ts" x="720" y="222" text-anchor="middle">黄：信号　赤：VCC 6V　茶：GND</text>
 
-<line x1="350" y1="234" x2="411" y2="234" class="wsig"/>
-<line x1="411" y1="234" x2="411" y2="194" class="wsig"/>
+<line x1="350" y1="230" x2="411" y2="230" class="wsig"/>
+<line x1="411" y1="230" x2="411" y2="194" class="wsig"/>
 <line x1="411" y1="194" x2="570" y2="194" class="wsig"/>
 <line x1="505" y1="208" x2="570" y2="208" class="w6v"/>
 <circle cx="505" cy="208" r="4" fill="#1a6e2a"/>
 <line x1="535" y1="224" x2="570" y2="224" class="wgnd"/>
 <circle cx="535" cy="224" r="4" fill="#333"/>
+<!-- 根元の 470µF -->
+<circle cx="556" cy="208" r="2.5" fill="#1a6e2a"/>
+<line x1="556" y1="208" x2="556" y2="213" class="capl"/>
+<line x1="549" y1="213" x2="563" y2="213" class="cap"/>
+<line x1="549" y1="219" x2="563" y2="219" class="cap"/>
+<line x1="556" y1="219" x2="556" y2="224" class="capl"/>
+<circle cx="556" cy="224" r="2.5" fill="#333"/>
+<text class="tn" x="866" y="232" text-anchor="end">根元に 470µF</text>
 
 <!-- ══════════ MG996R 腕（D6）══════════ -->
 <rect x="570" y="256" width="300" height="56" rx="8" class="box-srv"/>
 <text class="tm" x="720" y="280" text-anchor="middle">MG996R（腕）</text>
 <text class="ts" x="720" y="298" text-anchor="middle">黄：信号　赤：VCC 6V　茶：GND</text>
 
-<line x1="350" y1="279" x2="426" y2="279" class="wsig"/>
-<line x1="426" y1="279" x2="426" y2="270" class="wsig"/>
+<line x1="350" y1="286" x2="426" y2="286" class="wsig"/>
+<line x1="426" y1="286" x2="426" y2="270" class="wsig"/>
 <line x1="426" y1="270" x2="570" y2="270" class="wsig"/>
 <line x1="505" y1="288" x2="570" y2="288" class="w6v"/>
 <circle cx="505" cy="288" r="4" fill="#1a6e2a"/>
 <line x1="535" y1="304" x2="570" y2="304" class="wgnd"/>
 <circle cx="535" cy="304" r="4" fill="#333"/>
+<!-- 根元の 470µF -->
+<circle cx="556" cy="288" r="2.5" fill="#1a6e2a"/>
+<line x1="556" y1="288" x2="556" y2="293" class="capl"/>
+<line x1="549" y1="293" x2="563" y2="293" class="cap"/>
+<line x1="549" y1="299" x2="563" y2="299" class="cap"/>
+<line x1="556" y1="299" x2="556" y2="304" class="capl"/>
+<circle cx="556" cy="304" r="2.5" fill="#333"/>
+<text class="tn" x="866" y="308" text-anchor="end">根元に 470µF</text>
 
-<!-- ══════════ コンデンサ（6V系）══════════ -->
-<circle cx="505" cy="336" r="4" fill="#1a6e2a"/>
-<line x1="505" y1="336" x2="572" y2="336" class="w6v"/>
-<circle cx="535" cy="352" r="4" fill="#333"/>
-<line x1="652" y1="352" x2="535" y2="352" class="wgnd"/>
-<line x1="572" y1="330" x2="572" y2="356" class="w6v"/>
-<line x1="652" y1="330" x2="652" y2="356" class="wgnd"/>
-<rect x="564" y="318" width="104" height="46" rx="6" class="cap-box"/>
-<text class="tn" x="616" y="313" text-anchor="middle">470µF × 2（並列）</text>
-<line x1="572" y1="330" x2="582" y2="330" class="cap"/>
-<line x1="582" y1="322" x2="582" y2="338" class="cap"/>
-<line x1="589" y1="322" x2="589" y2="338" class="cap"/>
-<line x1="589" y1="330" x2="652" y2="330" class="cap"/>
-<text class="tq" x="575" y="327" fill="#8a5000">+</text>
-<text class="tq" x="647" y="327">−</text>
-<line x1="572" y1="356" x2="582" y2="356" class="cap"/>
-<line x1="582" y1="348" x2="582" y2="364" class="cap"/>
-<line x1="589" y1="348" x2="589" y2="364" class="cap"/>
-<line x1="589" y1="356" x2="652" y2="356" class="cap"/>
-<text class="tq" x="575" y="353" fill="#8a5000">+</text>
-<text class="tq" x="647" y="353">−</text>
-<text class="tq" x="700" y="344" fill="#8a5000">各 MG996R 根本に並列接続</text>
+<!-- ══════════ DFPlayer（D10/D11）══════════ -->
+<rect x="570" y="332" width="300" height="76" rx="8" class="box-dfp"/>
+<text class="tm" x="720" y="354" text-anchor="middle">DFPlayer Mini（HW-247A）</text>
+<text class="ts" x="720" y="372" text-anchor="middle">3:TX → D10　2:RX ← D11（1kΩ）　1:VCC　7:GND</text>
+<text class="tq" x="720" y="388" text-anchor="middle">6:SPK1・8:SPK2 → スピーカー 8Ω 2W（GND に繋がない）</text>
+<text class="tn" x="866" y="402" text-anchor="end">VCC–GND 直近に 100µF ＋ 0.1µF</text>
+
+<!-- D10: DFのTX → Arduino -->
+<line x1="350" y1="348" x2="570" y2="348" class="wsig"/>
+<!-- D11: Arduino → 1kΩ → DFのRX -->
+<line x1="350" y1="366" x2="440" y2="366" class="wsig"/>
+<rect x="440" y="361" width="24" height="10" rx="2" class="res"/>
+<text class="tq" x="452" y="358" text-anchor="middle" fill="#1e6eb5">1kΩ</text>
+<line x1="464" y1="366" x2="570" y2="366" class="wsig"/>
+<!-- 電源 -->
+<line x1="475" y1="380" x2="570" y2="380" class="w5v"/>
+<circle cx="475" cy="380" r="4" fill="#c93b2a"/>
+<line x1="535" y1="398" x2="570" y2="398" class="wgnd"/>
+<circle cx="535" cy="398" r="4" fill="#333"/>
+<!-- 100µF + 0.1µF（並列） -->
+<circle cx="550" cy="380" r="2.5" fill="#c93b2a"/>
+<line x1="550" y1="380" x2="550" y2="386" class="capl"/>
+<line x1="545" y1="386" x2="555" y2="386" class="cap"/>
+<line x1="545" y1="391" x2="555" y2="391" class="cap"/>
+<line x1="550" y1="391" x2="550" y2="398" class="capl"/>
+<circle cx="550" cy="398" r="2.5" fill="#333"/>
+<circle cx="562" cy="380" r="2.5" fill="#c93b2a"/>
+<line x1="562" y1="380" x2="562" y2="386" class="capl"/>
+<line x1="558" y1="386" x2="566" y2="386" class="cap"/>
+<line x1="558" y1="391" x2="566" y2="391" class="cap"/>
+<line x1="562" y1="391" x2="562" y2="398" class="capl"/>
+<circle cx="562" cy="398" r="2.5" fill="#333"/>
 
 <!-- ══════════ スイッチ（D12）══════════ -->
-<rect x="570" y="382" width="300" height="52" rx="8" class="box-sw"/>
-<text class="tm" x="720" y="406" text-anchor="middle">スイッチ（箱）</text>
-<text class="ts" x="720" y="422" text-anchor="middle">黒：GND　白：信号</text>
+<rect x="570" y="432" width="300" height="52" rx="8" class="box-sw"/>
+<text class="tm" x="720" y="456" text-anchor="middle">スイッチ（箱）</text>
+<text class="ts" x="720" y="472" text-anchor="middle">黒：GND　白：信号（INPUT_PULLUP・HIGH でトリガー）</text>
 
-<line x1="350" y1="362" x2="441" y2="362" class="wsig"/>
-<line x1="441" y1="362" x2="441" y2="396" class="wsig"/>
-<line x1="441" y1="396" x2="570" y2="396" class="wsig"/>
-<line x1="535" y1="414" x2="570" y2="414" class="wgnd"/>
-<circle cx="535" cy="414" r="4" fill="#333"/>
+<line x1="350" y1="458" x2="441" y2="458" class="wsig"/>
+<line x1="441" y1="458" x2="441" y2="446" class="wsig"/>
+<line x1="441" y1="446" x2="570" y2="446" class="wsig"/>
+<line x1="535" y1="466" x2="570" y2="466" class="wgnd"/>
+<circle cx="535" cy="466" r="4" fill="#333"/>
 
 <!-- ══════════ 凡例 ══════════ -->
-<line x1="14"  y1="536" x2="44"  y2="536" class="w5v"/>
-<text class="ts" x="50"  y="540">電源A 4.5V系</text>
-<line x1="150" y1="536" x2="180" y2="536" class="w6v"/>
-<text class="ts" x="186" y="540">電源B 6V系</text>
-<line x1="276" y1="536" x2="306" y2="536" class="wgnd"/>
-<text class="ts" x="312" y="540">GND共通</text>
-<line x1="388" y1="536" x2="418" y2="536" class="wsig"/>
-<text class="ts" x="424" y="540">信号線</text>
-<line x1="490" y1="536" x2="520" y2="536" stroke="#8a5000" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
-<text class="ts" x="526" y="540">コンデンサ</text>
-<circle cx="620" cy="536" r="4" fill="#555"/>
-<text class="ts" x="630" y="540">接続点（交差のみの箇所は点なし）</text>
+<line x1="14"  y1="612" x2="44"  y2="612" class="w5v"/>
+<text class="ts" x="50"  y="616">電源A 4.5V系</text>
+<line x1="150" y1="612" x2="180" y2="612" class="w6v"/>
+<text class="ts" x="186" y="616">電源B 6V系</text>
+<line x1="276" y1="612" x2="306" y2="612" class="wgnd"/>
+<text class="ts" x="312" y="616">GND共通</text>
+<line x1="388" y1="612" x2="418" y2="612" class="wsig"/>
+<text class="ts" x="424" y="616">信号線</text>
+<line x1="492" y1="607" x2="508" y2="607" class="cap"/>
+<line x1="492" y1="614" x2="508" y2="614" class="cap"/>
+<text class="ts" x="516" y="616">コンデンサ</text>
+<circle cx="600" cy="612" r="4" fill="#555"/>
+<text class="ts" x="610" y="616">接続点（交差のみの箇所は点なし）</text>
 
 <!-- ══════════ 警告 ══════════ -->
-<rect x="14" y="556" width="872" height="20" rx="4" fill="#fff8e1" stroke="#f0c040" stroke-width="1"/>
-<text x="450" y="570" text-anchor="middle" font-size="10" fill="#7a4e00">
-  ⚠ 電池A・BのGNDを必ず共通接続すること — D6信号の基準電位が合わないとMG996Rが誤動作する
+<rect x="14" y="636" width="872" height="20" rx="4" fill="#fff8e1" stroke="#f0c040" stroke-width="1"/>
+<text x="450" y="650" text-anchor="middle" font-size="10" fill="#7a4e00">
+  ⚠ 電池A・BのGNDを必ず共通接続すること — D5/D6 信号の基準電位が合わないと MG996R が誤動作する
 </text>
-</svg>
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo3MGE1Mzc4ZC0yM2ZkLTQ1ZjQtYWU1NS0xZGExMzhiMmNhMTYAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaIkZJ2Mj7j6OzHXHDs7F/xAAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpjYTgwNjQwZS1kNjkzLTRiZjItYjgyNy01OWNjNGI5MWU2ZTZscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoy/Qub9oVU/y/j34J9Y8nlwAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggx63h9lv8uYrlF+6NEEYRhIYARR5avRiwA2S2lGfLhgmkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaEuFSKPo9gJnceTWvYat634AAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIAfgMQpG21XB5CtyDJSBxopc7QQCwvmPfgMoKHuFlIr2ZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GTcRZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjcwYTUzNzhkLTIzZmQtNDVmNC1hZTU1LTFkYTEzOGIyY2ExNi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmQ4NDc5OWZlLTkwOWEtNGRiOS05NmM3LWNmZGI4ZWMyOTQ3ZXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCDHreH2W/y5iuUX7o0QRhGEhgBFHlq9GLADZLaUZ8uGCaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFgg5RxOa41unsjSSATTuJxpHAAwWoAdljS7nTFNeJZ9lmCiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFgggHk08LxzsNaqZmEnfsr9nxyCe1NuXS8hGE3wjNKUQPN0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQP6bzll/e//20yf1tF8Uy9s20I9FH1UXd87XYYkt3pbAu87FYoOl4iZaR3Wr5OqJYx9X3WQjyCguJ2IwysDb2Xw=</c2pa:manifest></metadata></svg>
