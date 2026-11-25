@@ -29,7 +29,7 @@
 //  ---- サーボ速度メモ（MG996R データシート: 0.17s/60°@4.8V、0.14s/60°@6V）----
 //  MG996R (lid) : 4.8V 基準 2.83ms/度
 //                 90° 動作 → 最低 255ms、余裕込みで LID_MOVE_MS = 300ms
-//  MG996R (arm) : 110° 動作 → 最低 311ms、余裕込みで ARM_MOVE_MS = 420ms
+//  MG996R (arm) : 待ち時間は「角度差 × ARM_MS_PER_DEG + ARM_SETTLE_MS」で毎回計算（armMoveTo）
 // ===================================================
 
 #include <Servo.h>
@@ -61,8 +61,32 @@ const int dfRxPin   = 10;   // DFPlayer TX → Arduino
 // 90° が閉じ、3° が開き
 const int lidClosed    = 90;   // フタが閉まる角度
 const int lidOpen      = 3;    // フタが開く角度（壁ドン防止ストッパー）
-const int armRetracted = 3;    // 腕が格納された角度（壁ドン防止）
-const int armExtended  = 110;  // 腕が伸びた角度
+
+// ------------------------------------------------------------
+//  腕（D6 / MG996R）の設定 ― 腕に関する数値はすべてここ
+// ------------------------------------------------------------
+// 角度は実機の角度そのもの（腕を逆側に作り直したあと、実機で確認した位置）
+//  シリアルで a<角度>（例: a120）を送ると、書き込み直さずに腕をその角度へ動かして確かめられる
+const int ARM_REST_DEG = 70;    // 休む（格納）位置
+const int ARM_PUSH_DEG = 175;   // スイッチを押す位置（177 は端ぎりぎりで固まりやすいので 175 に）
+
+// 端に押し付けて固まるのを防ぐ安全範囲。この外の角度は範囲内に丸めてから送る
+const int ARM_SAFE_MIN = 5;
+const int ARM_SAFE_MAX = 175;
+
+// 移動の待ち時間 = 角度差 × ARM_MS_PER_DEG + ARM_SETTLE_MS
+//  MG996R は 0.17s/60°（4.8V）≒ 2.8ms/度。スイッチを押し戻す負荷と電池の消耗を見込んで 4ms/度。
+//  動き切る前に次の命令や脱力をすると、腕が途中で止まる（これまでの不具合の原因）
+const int ARM_MS_PER_DEG = 4;
+const int ARM_SETTLE_MS  = 120;
+
+// 動作中も、腕を使わない間は脱力するか
+//  0: 動作中は腕も保持し続ける（確実。まずはこちらで動きを確認する）
+//  1: 突いた後は脱力する（保持中のジリジリが減る。0 で問題なく動くのを確認してから試す）
+#define ARM_DETACH_BETWEEN 0
+
+// 腕を動かすたびに、シリアルへ角度と待ち時間を出す（不具合の切り分け用）
+#define ARM_LOG 1
 
 // --- 演出用の中間角度（旧コードの直書きを定数化）---
 const int lidPeek   = 48;  // Case2: ためらい時の半開き角度
@@ -72,7 +96,6 @@ const int lidFeint2 = 35;  // Case4: フェイント2（90→35 で 55°分開�
 // --- 動作完了を保証する最低待機時間 ---
 const int LID_MOVE_MS = 300;   // MG996R が 90° 動ききるのに必要（4.8V基準 255ms＋余裕）
 const int LID_FAST_MS = 260;   // MG996R の物理的な下限付近（Case3「最速」演出用）
-const int ARM_MOVE_MS = 420;   // MG996R が 110° 動ききるのに必要（重いので余裕込み）
 
 // --- スイッチのデバウンス時間 ---
 const int DEBOUNCE_MS = 20;
@@ -266,23 +289,37 @@ int pickSound() {
 //  サーボの有効化／無効化
 //  IDLE_DETACH=1 のときだけ attach/detach を行う。
 //  =0 のときは setup で attach したまま常時保持する。
+//
+//  ※ attach() は最後に write() した角度をそのまま出力する（角度は初期化されない）ので、
+//    途中で脱力→再接続してもサーボが跳ねることはない。
 // ============================================================
-void enableServos() {
+
+// ※ フタは開いている間に脱力すると落ちて腕とぶつかる恐れがあるので、動作中は保持する
+
+void servoOn(Servo &s, int pin) {
 #if IDLE_DETACH
-  lidServo.attach(lidPin);
-  armServo.attach(armPin);
+  if (!s.attached()) s.attach(pin);
+#endif
+}
+void servoOff(Servo &s, int pin) {
+#if IDLE_DETACH
+  s.detach();
+  // Servo ライブラリは、パルスが HIGH の最中に detach すると LOW に戻さない
+  // （割り込み側が「無効なピン」を LOW に書かないため）。
+  // 信号線が HIGH のまま残るとサーボがジリジリ鳴るので、明示的に LOW へ戻す。
+  digitalWrite(pin, LOW);
+#endif
+}
+
+void enableServos() {
+  servoOn(lidServo, lidPin);
+#if !ARM_DETACH_BETWEEN
+  servoOn(armServo, armPin);
 #endif
 }
 void disableServos() {
-#if IDLE_DETACH
-  lidServo.detach();
-  armServo.detach();
-  // Servo ライブラリは、パルスが HIGH の最中に detach すると LOW に戻さない
-  // （割り込み側が「無効なピン」を LOW に書かないため）。
-  // 信号線が HIGH のまま残るとサーボが待機中にジリジリ鳴るので、明示的に LOW へ戻す。
-  digitalWrite(lidPin, LOW);
-  digitalWrite(armPin, LOW);
-#endif
+  servoOff(lidServo, lidPin);
+  servoOff(armServo, armPin);
 }
 
 // ============================================================
@@ -310,11 +347,44 @@ void sweep(Servo &s, int from, int to, int stepDelay) {
 void openLid(int waitMs = LID_MOVE_MS)  { lidServo.write(lidOpen);   delay(waitMs); }
 void closeLid(int waitMs = LID_MOVE_MS) { lidServo.write(lidClosed); delay(waitMs); }
 
-// 腕を1回フルストロークさせる（伸ばす→戻す）
-void poke() {
-  armServo.write(armExtended);  delay(ARM_MOVE_MS);
-  armServo.write(armRetracted); delay(ARM_MOVE_MS);
+// ============================================================
+//  腕（D6）の制御 ― 腕を動かすのは必ず armMoveTo() を通す
+//  ・角度を安全範囲に丸める
+//  ・接続されていなければ接続する
+//  ・角度差から待ち時間を計算し、動き切るまで待つ
+//  これにより「動き切る前に脱力・次の命令」で腕が止まることがなくなる
+// ============================================================
+int  armPos   = ARM_REST_DEG;  // 最後に指示した角度
+bool armKnown = false;         // 起動直後は実際の位置が分からない
+
+void armMoveTo(int deg) {
+  deg = constrain(deg, ARM_SAFE_MIN, ARM_SAFE_MAX);
+  int dist = armKnown ? abs(deg - armPos) : 180;   // 位置不明なら最大移動ぶん待つ
+  servoOn(armServo, armPin);
+  armServo.write(deg);
+  armPos   = deg;
+  armKnown = true;
+  unsigned long waitMs = (unsigned long)dist * ARM_MS_PER_DEG + ARM_SETTLE_MS;
+#if ARM_LOG
+  Serial.print(F("  腕 → ")); Serial.print(deg);
+  Serial.print(F("° / 待ち ")); Serial.print(waitMs); Serial.println(F("ms"));
+#endif
+  delay(waitMs);
 }
+
+// 腕を脱力（armMoveTo が動き切るまで待ってから戻るので、その後に呼べば途中で止まらない）
+void armRelease() { servoOff(armServo, armPin); }
+
+// 腕を1回フルストロークさせる（押す→休む）
+void poke() {
+  armMoveTo(ARM_PUSH_DEG);
+  armMoveTo(ARM_REST_DEG);
+#if ARM_DETACH_BETWEEN
+  armRelease();
+#endif
+}
+
+void printHelp();  // 下で定義（シリアルコマンドの説明）
 
 // ============================================================
 //  setup
@@ -331,8 +401,7 @@ void setup() {
   // 初期姿勢へ移動（腕が戻りきってからフタを閉じる順序を守る。2個同時に動かさない）
   lidServo.attach(lidPin);
   armServo.attach(armPin);
-  armServo.write(armRetracted);
-  delay(ARM_MOVE_MS);
+  armMoveTo(ARM_REST_DEG);     // 起動直後は位置不明なので、最大移動ぶん待ってから次へ
   lidServo.write(lidClosed);
   delay(LID_MOVE_MS);
 
@@ -343,7 +412,7 @@ void setup() {
   Serial.println(F("=== Useless Box 起動 ==="));
   Serial.print(F("スイッチ: D")); Serial.print(switchPin);
   Serial.print(F(" / DFPlayer送信: D")); Serial.println(dfTxPin);
-  Serial.println(F("スイッチ、またはシリアルで 1〜5 を送ると動作"));
+  printHelp();
 }
 
 // ============================================================
@@ -351,17 +420,81 @@ void setup() {
 // ============================================================
 void runCase(int x, int sound);  // 下で定義
 
-// --- 動作確認用: シリアルから '1'〜'5' を受けたらその case 番号を返す（無ければ 0）---
-int readForcedCase() {
+// ============================================================
+//  シリアルコマンド（動作確認・角度調整用）
+//  シリアルモニタは 9600bps・「改行」あり（LF / CR / CRLF どれでも可）で使う
+//    1〜5      : その case を実行（音も同じ番号）
+//    a<角度>   : 腕をその角度へ（例: a120）。保持したままになるので終わったら d
+//    l<角度>   : フタをその角度へ（例: l45）
+//    p         : 腕を1回突く（押す→休む）
+//    d         : 両方脱力
+//    ?         : 今の設定を表示
+//  ※ 調整中はスイッチを OFF に（ON のままだと case が繰り返し動いて調整を上書きする）
+// ============================================================
+void printHelp() {
+  Serial.println(F("シリアル: 1〜5=case / a<角度>=腕 / l<角度>=フタ / p=突く / d=脱力 / ?=設定"));
+}
+
+void printStatus() {
+  Serial.print(F("腕: 休む ")); Serial.print(ARM_REST_DEG);
+  Serial.print(F("° / 押す ")); Serial.print(ARM_PUSH_DEG);
+  Serial.print(F("° / 安全範囲 ")); Serial.print(ARM_SAFE_MIN);
+  Serial.print(F("〜")); Serial.print(ARM_SAFE_MAX);
+  Serial.print(F("° / 動作中の脱力 ")); Serial.println(ARM_DETACH_BETWEEN ? F("あり") : F("なし"));
+  Serial.print(F("フタ: 閉 ")); Serial.print(lidClosed);
+  Serial.print(F("° / 開 ")); Serial.print(lidOpen); Serial.println(F("°"));
+}
+
+// 1行分のコマンドを処理。case を実行すべきときはその番号（1〜5）、それ以外は 0 を返す
+int runCommand(const char *cmd) {
+  char c = cmd[0];
+  if (c >= '1' && c <= '5' && cmd[1] == '\0') return c - '0';
+
+  if ((c == 'a' || c == 'A') && cmd[1] != '\0') {
+    int deg = atoi(cmd + 1);
+    Serial.print(F("[調整] 腕 → ")); Serial.print(deg); Serial.println(F("°（終わったら d で脱力）"));
+    armMoveTo(deg);
+  } else if ((c == 'l' || c == 'L') && cmd[1] != '\0') {
+    int deg = constrain(atoi(cmd + 1), 0, 180);
+    Serial.print(F("[調整] フタ → ")); Serial.print(deg); Serial.println(F("°（終わったら d で脱力）"));
+    servoOn(lidServo, lidPin);
+    lidServo.write(deg);
+    delay(LID_MOVE_MS);
+  } else if (c == 'p' || c == 'P') {
+    Serial.println(F("[調整] 腕を1回突く"));
+    poke();
+  } else if (c == 'd' || c == 'D') {
+    disableServos();
+    Serial.println(F("[調整] 両方脱力"));
+  } else if (c == '?') {
+    printStatus();
+  } else {
+    printHelp();
+  }
+  return 0;
+}
+
+// シリアルを1文字ずつ溜め、改行が来たら1行のコマンドとして処理する
+int handleSerial() {
+  static char buf[12];
+  static byte len = 0;
   while (Serial.available()) {
     char c = Serial.read();
-    if (c >= '1' && c <= '5') return c - '0';
+    if (c == '\r' || c == '\n') {
+      if (len == 0) continue;          // CRLF の2文字目など、空行は無視
+      buf[len] = '\0';
+      len = 0;
+      int r = runCommand(buf);
+      if (r) return r;
+    } else if (len < sizeof(buf) - 1) {
+      buf[len++] = c;
+    }
   }
   return 0;
 }
 
 void loop() {
-  int x = readForcedCase();   // シリアル指定があれば最優先（動きの番号）
+  int x = handleSerial();     // シリアル指定があれば最優先（動きの番号）。調整コマンドもここで処理
   int sound;                  // 鳴らす音の番号
 
   if (x == 0) {
@@ -441,7 +574,7 @@ void runCase(int x, int sound) {
     // --------------------------------------------------
     //  Case 3 : 即ブチ切れ
     //  間を一切置かず、フタを物理限界近くで動かす "演出上の最速" タイプ
-    //  （MG996R の 420ms は物理限界のため省けない）
+    //  （腕の移動時間は MG996R の速さで決まるため省けない）
     // --------------------------------------------------
     case 3:
       openLid(LID_FAST_MS);   // フタを最速で開ける
